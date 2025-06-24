@@ -108,13 +108,18 @@ const productController = require('../controllers/admin/productController');
 const bannerController = require("../controllers/admin/bannerController");
 const orderController = require("../controllers/admin/orderController");
 const couponController = require('../controllers/admin/couponController');
-const salesController = require('../controllers/admin/salesController');
+// const salesController = require('../controllers/admin/salesController');
 // const commentController = require('../controllers/admin/commentController');
 const transactionController = require('../controllers/admin/transactionController');
 
 const { adminAuth } = require('../middlewares/auth');
 const multer = require("multer");
 const upload = multer();
+const salesController = require('../controllers/admin/salesController');
+// GET Sales Report
+router.get('/sales', salesController.getSalesData);
+router.get('/download-sales-report', salesController.downloadSalesReport);
+
 
 router.get('/pageerror', adminController.pageError);
 router.get('/login', adminController.loadLogin);
@@ -189,9 +194,9 @@ router.put("/updateCoupon",adminAuth,couponController.updateCoupon)
 router.get("/deletecoupon",adminAuth,couponController.deleteCoupon)
 
 
-// Sales Management
-router.get('/sales', adminAuth, salesController.loadSalesPage);
-router.get('/sales/report', adminAuth, salesController.loadSalesPage);
+// // Sales Management
+// router.get('/sales', adminAuth, salesController.loadSalesPage);
+// router.get('/sales/report', adminAuth, salesController.loadSalesPage);
 
 
 // Transaction Management Routes
