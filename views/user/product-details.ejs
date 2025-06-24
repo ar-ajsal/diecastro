@@ -1,0 +1,1116 @@
+<%- include("../../views/partials/user/header") %>
+<!-- Toastr CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+<!-- Toastr JS (requires jQuery, which you already have) -->
+
+<main class="ps-main">
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .cssbuttons-io-button{
+    color: #fff;
+    background-color: #337ab7;
+    position: relative;
+    left: 77px;
+    top: -58px;
+}
+    /* Breadcrumb Section */
+    .banner-area {
+      padding: 20px 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    .breadcrumb-banner {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .col-first nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Breadcrumb Links */
+    .col-first a {
+      text-decoration: none;
+      color: #2c3e50;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 8px 12px;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .col-first a:hover {
+      background: #27ae60;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Current Page (Non-Linked) */
+    .col-first span.current {
+      color: #27ae60;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 8px 12px;
+    }
+
+    /* Separator */
+    .separator {
+      color: #7f8c8d;
+      font-size: 14px;
+      margin: 0 5px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .breadcrumb-banner {
+        justify-content: flex-start;
+      }
+
+      .col-first a,
+      .col-first span.current {
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      overflow: auto;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 800px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+    }
+
+    .ps-product__block h4 a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .ps-product__block h4 a:hover {
+      text-decoration: underline;
+    }
+
+    .ps-product__block {
+      margin: 20px;
+    }
+
+    /* New Cart Button Styles */
+    .cart-button {
+      background: linear-gradient(135deg, #2AC37D, #2AC37D);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 16px;
+      font-family: "Poppins", sans-serif;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transform: translateZ(0);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.2),
+        0 5px 15px rgba(41, 98, 255, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+      animation: subtle-pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+
+    .cart-button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: 0.5s;
+    }
+
+    .cart-button:hover::before {
+      left: 100%;
+    }
+
+    .cart-button:hover {
+      transform: translateZ(10px) scale(1.02);
+      background: linear-gradient(135deg,#50CF96, #50CF96);
+      box-shadow:
+        0 8px 25px rgba(41, 98, 255, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+        0 0 20px rgba(41, 98, 255, 0.2),
+        0 0 0 4px rgba(41, 98, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+      letter-spacing: 1px;
+    }
+    .ps-icon-heart{
+      color: #2ac37d;
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .cart-button:active {
+      transform: translateY(2px) translateZ(-5px);
+      box-shadow:
+        0 4px 15px rgba(41, 98, 255, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    }
+
+    .cart-button::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0)
+      );
+      pointer-events: none;
+    }
+
+    .cart-icon {
+      display: inline-block;
+      margin-right: 8px;
+      transition: all 0.3s ease;
+      transform: translateZ(5px);
+    }
+
+    .cart-icon svg {
+      vertical-align: middle;
+      width: 20px;
+      height: 20px;
+    }
+
+    .cart-button:hover .cart-icon svg {
+      transform: scale(1.1);
+    }
+
+    .progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.8);
+      width: 0;
+      transform: translateZ(2px);
+    }
+
+    .adding {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .adding .progress-bar {
+      animation: progress 1s ease-in-out;
+    }
+
+    .success {
+      background: linear-gradient(135deg, #00c853, #009624) !important;
+      transform: translateZ(5px);
+      box-shadow:
+        0 4px 15px rgba(0, 200, 83, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    }
+
+    .success .cart-icon {
+      animation: addedToCart 0.5s ease-in-out;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+    }
+
+    .cart-button.disabled {
+      background: gray;
+      pointer-events: none;
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
+      animation: none;
+    }
+
+    .cart-button.disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .cart-button.disabled::before,
+    .cart-button.disabled::after {
+      display: none;
+    }
+
+    @keyframes subtle-pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(41, 98, 255, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(41, 98, 255, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(41, 98, 255, 0);
+      }
+    }
+
+    @keyframes addedToCart {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.4) rotate(45deg);
+      }
+      100% {
+        transform: scale(1) rotate(0);
+      }
+    }
+
+    @keyframes progress {
+      0% {
+        width: 0;
+      }
+      100% {
+        width: 100%;
+      }
+    }
+
+    @keyframes checkmark {
+      0% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .cart-toggle:checked + .cart-button {
+      pointer-events: none;
+      animation: addToCart 1.5s ease-in-out forwards;
+    }
+
+    @keyframes addToCart {
+      0% {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+      66% {
+        background: linear-gradient(135deg, #50CF96, #50CF96);
+      }
+      67% {
+        background: linear-gradient(135deg, #50CF96, #50CF96);
+      }
+      100% {
+        pointer-events: all;
+        opacity: 1;
+      }
+    }
+
+    .cart-toggle:checked + .cart-button .progress-bar {
+      animation: progress 1s ease-in-out;
+    }
+
+    .cart-toggle:checked + .cart-button .cart-icon {
+      animation: addedToCart 0.5s ease-in-out 1s;
+    }
+
+    .cart-toggle:checked {
+      animation: reset 0.1s 1.5s forwards;
+    }
+
+    @keyframes reset {
+      to {
+        checked: false;
+      }
+    }
+
+    .cart-toggle {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cart-button {
+        transition: none;
+      }
+      .cart-button:hover,
+      .cart-button:active {
+        animation: none;
+        transform: none;
+      }
+    }
+
+    @media (hover: hover) {
+      .cart-button:hover {
+        transform: translateZ(10px) rotateX(2deg) rotateY(2deg) scale(1.02);
+      }
+    }
+  </style>
+  <section class="banner-area organic-breadcrumb">
+    <div class="container">
+      <div class="breadcrumb-banner">
+        <div class="col-first">
+          <nav>
+            <a href="/home">Home</a>
+            <span class="separator">/</span>
+            <a href="/shop">Shop</a>
+            <span class="separator">/</span>
+            <span class="current">Product Detail</span>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="test">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4 "></div>
+      </div>
+    </div>
+  </div>
+  <div class="ps-product--detail pt-60">
+    <div class="ps-container">
+      <div class="row">
+        <div class="col-lg-10 col-md-12 col-lg-offset-1">
+          <div class="ps-product__thumbnail">
+            <div class="ps-product__preview">
+              <div class="ps-product__variants">
+                <% product.productImage.forEach((img, index) => { %>
+                  <div class="item"><img src="/<%= img %>" alt="Product Image <%= index + 1 %>"></div>
+                <% }) %>
+              </div>
+            </div>
+            <div class="ps-product__image">
+              <% product.productImage.forEach((img, index) => { %>
+                <div class="item">
+                  <img class="zoom" src="/<%= img %>" alt="Product Image <%= index + 1 %>" data-zoom-image="/<%= img %>">
+                </div>
+              <% }) %>
+            </div>
+          </div>
+          <div class="ps-product__thumbnail--mobile">
+            <div class="ps-product__main-img"><img src="/<%= product.productImage[0] %>" alt=""></div>
+            <div class="ps-product__preview owl-slider" data-owl-auto="true" data-owl-loop="true"
+              data-owl-speed="5000" data-owl-gap="20" data-owl-nav="true" data-owl-dots="false"
+              data-owl-item="3" data-owl-item-xs="3" data-owl-item-sm="3" data-owl-item-md="3"
+              data-owl-item-lg="3" data-owl-duration="1000" data-owl-mousedrag="on">
+              <% product.productImage.forEach((img) => { %>
+                <img src="/<%= img %>" alt="">
+              <% }) %>
+            </div>
+          </div>
+          <div class="ps-product__info">
+            <div class="ps-product__rating">
+              <select class="ps-rating">
+                <option value="1">1</option>
+                <option value="1">2</option>
+                <option value="1">3</option>
+                <option value="1">4</option>
+                <option value="2">5</option>
+              </select>
+              <a href="#">(Read all <%= reviews ? reviews.length : 0 %> reviews)</a>
+            </div>
+            <h1><%= product.productName %></h1>
+            <p class="ps-product__category">
+              <a href="#"><%= product.brand %></a>,
+              <a href="#"><%= product.category.name %></a>
+            </p>
+            <h3 class="ps-product__price">₹ <%= Math.floor(product.salePrice) %>
+ <del>₹ <%= product.regularPrice %></del><h4 style="margin-left: 10px; color: #00c853;"> <%=product.category.categoryOffer > product.productOffer ? product.category.categoryOffer : product.productOffer %> % Off</h4></h3>
+            <div class="ps-product__block ps-product__quickview">
+              <h4>QUICK REVIEW</h4> 
+              <p><%= product.description %></p>
+            </div>
+            <div class="ps-product__block ps-product__style">
+              <h4><%= product.color  %></h4>
+              <ul>
+                <li style="display: inline-block; margin-right: 10px;">
+                  <div style="width: 30px; height: 30px; border-radius: 50%; background-color: <%= product.color.toLowerCase() %>;"></div>
+                </li>
+              </ul>
+            </div>
+            <ul class="list">
+              <% if (product.quantity > 0) { %>
+                <li>
+                  <a href="#">
+                    <span>Availability</span> :
+                    <% if (product.quantity < 5) { %>
+                      <span style="color: orange;">Only <%= product.quantity %> left!</span>
+                    <% } else { %>
+                      <span style="color: green;">In Stock</span>
+                    <% } %>
+                  </a>
+                </li>
+                <li><span>Stock:</span> <%= product.quantity %></li>
+              <% } else { %>
+                <li>
+                  <a href="#">
+                    <span>Availability</span> : <span style="color: red;">No Stock</span>
+                  </a>
+                </li>
+              <% } %>
+              
+              <h4>SCALE: <%= product.scale %></h4>
+              <% if (viewsToday > 0) { %>
+                <li><span style="color: orange;"> <li><i class="fas fa-eye"></i><%= viewsToday %> people viewed this today</span></li>
+              <% } %>
+              
+            </ul>
+            
+            <div class="ps-product__block ps-product__size">
+            
+              <a href="javascript:void(0)" id="scale-link">Scale Guide</a>
+              <div class="form-group">
+                <input class="form-control" type="number" value="1" min="1" max="<%= product.quantity > 5 ? 5 : product.quantity %>" id="cart-quantity">
+              </div>
+            </div>
+            <div id="scaleModal" class="modal">
+              <div class="modal-content">
+                <span class="close">×</span>
+                <iframe src="https://cdn.shopify.com/s/files/1/2784/4966/files/Model_Scales_with_Figure_-_ENGLISH.jpg?v=1706259426" width="100%" height="500"></iframe>
+              </div>
+            </div>
+            <div class="ps-product__shopping">
+              <% if(product.quantity >= 1 && !product.isBlocked && product.category.isListed) { %>
+                <input hidden class="cart-toggle" id="cart-toggle-<%= product._id %>" type="checkbox" onclick="addToCart('<%= product._id %>')">
+                <label class="cart-button" for="cart-toggle-<%= product._id %>">
+                  <span class="cart-icon">
+                    <svg
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      height="24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle r="1" cy="21" cx="9"></circle>
+                      <circle r="1" cy="21" cx="20"></circle>
+                      <path
+                        d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                      ></path>
+                    </svg>
+                  </span>
+                  Add to Cart
+                  <div class="progress-bar"></div>
+                </label>
+              <% } else { %>
+                <label class="cart-button disabled">
+                  <span class="cart-icon">
+                    <svg
+                      stroke-linejoin="round"
+                      stroke-linecap="round"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      height="24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle r="1" cy="21" cx="9"></circle>
+                      <circle r="1" cy="21" cx="20"></circle>
+                      <path
+                        d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"
+                      ></path>
+                    </svg>
+                  </span>
+                  Out of Stock
+                  <div class="progress-bar"></div>
+                </label>
+              <% } %>
+              
+              <div class="ps-product__actions">
+                <a class="mr-10" href="javascript:void(0)" onclick="addToWishlist('<%= product._id %>')"><i class="ps-icon-heart"></i></a>
+                <form class="ps-product__actions"  action="/compare/add/<%= product._id %>" method="POST">
+  <button  type="submit" style="background: none; border: none; cursor: pointer; font-size: 24px; color: #2AC37D;">
+    <i class="fa-solid fa-code-compare"></i>
+  </button>
+</form>
+
+                
+                <!-- <a href="#"><i class="ps-icon-share"></i></a> -->
+              </div>
+              
+            </div>
+            
+          </div>
+          <div class="clearfix"></div>
+          <div class="ps-product__content mt-50">
+            <ul class="tab-list" role="tablist">
+              <li class="active"><a href="#tab_01" aria-controls="tab_01" role="tab" data-toggle="tab">Overview</a></li>
+              <li><a href="#tab_02" aria-controls="tab_02" role="tab" data-toggle="tab">Review</a></li>
+              <li><a href="#tab_03" aria-controls="tab_03" role="tab" data-toggle="tab">Product Tags</a></li>
+              <li><a href="#tab_04" aria-controls="tab_04" role="tab" data-toggle="tab">Additional Info</a></li>
+            </ul>
+          </div>
+          <div class="tab-content mb-60">
+            <div class="tab-pane active" role="tabpanel" id="tab_01">
+              <p><%= product.description %></p>
+            </div>
+            <div class="tab-pane" role="tabpanel" id="tab_02">
+              <p class="mb-20"><%= reviews ? reviews.length : 0 %> reviews for <strong><%= product.productName %></strong></p>
+              <div id="reviews-container">
+                <% if (reviews && reviews.length > 0) { %>
+                  <% reviews.forEach(review => { %>
+                    <div class="ps-review">
+                      <div class="ps-review__thumbnail"><img src="/images/user/default.jpg" alt=""></div>
+                      <div class="ps-review__content">
+                        <header>
+                          <select class="ps-rating" disabled>
+                            <% for(let i = 1; i <= 5; i++) { %>
+                              <option value="<%= i %>" <%= review.rating === i ? 'selected' : '' %>><%= i %></option>
+                            <% } %>
+                          </select>
+                          <p>By <a href="#"><%= review.user.name %></a> - <%= new Date(review.createdAt).toLocaleDateString() %></p>
+                        </header>
+                        <p><%= review.comment %></p>
+                      </div>
+                    </div>
+                  <% }) %>
+                <% } else { %>
+                  <p>No reviews yet. Be the first to review this product!</p>
+                <% } %>
+              </div>
+              <form class="ps-product__review" id="review-form" action="/submitReview" method="post">
+                <h4>ADD YOUR REVIEW</h4>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                      <label>Your rating<span></span></label>
+                      <select class="ps-rating" name="rating" required>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                      <label>Your Review:</label>
+                      <textarea class="form-control" name="comment" rows="6" required></textarea>
+                    </div>
+                    <div class="form-group">
+                      <input type="hidden" name="productId" value="<%= product._id %>">
+                      <button type="submit" class="ps-btn ps-btn--sm">Submit<i class="ps-icon-next"></i></button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane" role="tabpanel" id="tab_03">
+              <p>Add your tags <span> *</span></p>
+              <form class="ps-product__tags" action="_action" method="post">
+                <div class="form-group">
+                  <input class="form-control" type="text" placeholder="">
+                  <button class="ps-btn ps-btn--sm">Add Tags</button>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane" role="tabpanel" id="tab_04">
+              <div class="form-group">
+                <textarea class="form-control" rows="6" placeholder="Enter additional notes here..."></textarea>
+              </div>
+              <div class="form-group">
+                <button class="ps-btn" type="button">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ps-section ps-section--top-sales ps-owl-root pt-40 pb-80">
+    <div class="ps-container">
+      <div class="ps-section__header mb-50">
+        <div class="row">
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12 ">
+            <h3 class="ps-section__title" data-mask="Related item">- YOU MIGHT ALSO LIKE</h3>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+            <div class="ps-owl-actions"><a class="ps-prev" href="#"><i class="ps-icon-arrow-right"></i>Prev</a><a class="ps-next" href="#">Next<i class="ps-icon-arrow-left"></i></a></div>
+          </div>
+        </div>
+      </div>
+      <div class="ps-section__content">
+        <div class="ps-owl--colection owl-slider" data-owl-auto="true" data-owl-loop="true"
+          data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false"
+          data-owl-item="4" data-owl-item-xs="1" data-owl-item-sm="2" data-owl-item-md="3"
+          data-owl-item-lg="4" data-owl-duration="1000" data-owl-mousedrag="on">
+          <% products.forEach(product => { %>
+            <div class="ps-shoes--carousel">
+              <div class="ps-shoe">
+                <div class="ps-shoe__thumbnail">
+                  <div class="ps-badge"><span>New</span></div>
+                  <a class="ps-shoe__favorite" href="javascript:void(0)" onclick="addToWishlist('<%= product._id %>')"><i class="ps-icon-heart"></i></a>
+                  <img src="/<%= product.productImage[0] %>" alt="">
+                  <a class="ps-shoe__overlay" href="/productDetails?id=<%= product._id %>"></a>
+                </div>
+                <div class="ps-shoe__content">
+                  <div class="ps-shoe__variants">
+                    <div class="ps-shoe__variant normal">
+                      <% product.productImage.slice(0, 4).forEach(img => { %>
+                        <img src="/<%= img %>" alt="">
+                      <% }) %>
+                    </div>
+                    <select class="ps-rating ps-shoe__rating">
+                      <option value="1">1</option>
+                      <option value="1">2</option>
+                      <option value="1">3</option>
+                      <option value="1">4</option>
+                      <option value="2">5</option>
+                    </select>
+                  </div>
+                  <div class="ps-shoe__detail">
+                    <a class="ps-shoe__name" href="/productDetails?id=<%= product._id %>"><%= product.productName %></a>
+                    <p class="ps-shoe__categories">
+                      <a href="#"><%= product.category.name %></a>,
+                      <a href="#"><%= product.brand %></a>
+                    </p>
+                    <span class="ps-shoe__price"> ₹ <%= product.regularPrice %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- 
+  <script>
+    
+    var modal = document.getElementById("scaleModal");
+    var scaleLink = document.getElementById("scale-link");
+    var span = document.getElementsByClassName("close")[0];
+
+    scaleLink.addEventListener("click", function() {
+      modal.style.display = "block";
+    });
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    document.getElementById('review-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData);
+      console.log('Submitting review:', data);
+
+      try {
+        const response = await fetch('/submitReview', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          console.error('Non-JSON response:', text);
+          throw new Error('Server returned non-JSON response. Please check if you are logged in.');
+        }
+
+        const result = await response.json();
+        console.log('Server response:', result);
+
+        if (result.success) {
+          const reviewContainer = document.getElementById('reviews-container');
+          const reviewCount = document.querySelector('#tab_02 .mb-20');
+
+          const newReview = document.createElement('div');
+          newReview.className = 'ps-review';
+          newReview.innerHTML = `
+            <div class="ps-review__thumbnail"><img src="/images/user/default.jpg" alt=""></div>
+            <div class="ps-review__content">
+              <header>
+                <select class="ps-rating" disabled>
+                  ${[...Array(5)].map((_, i) => `<option value="${i + 1}" ${result.review.rating === i + 1 ? 'selected' : ''}>${i + 1}</option>`).join('')}
+                </select>
+                <p>By <a href="#">${result.review.user}</a> - ${new Date(result.review.createdAt).toLocaleDateString()}</p>
+              </header>
+              <p>${result.review.comment}</p>
+            </div>
+          `;
+          reviewContainer.prepend(newReview);
+
+          if (reviewCount) {
+            const currentCountMatch = reviewCount.textContent.match(/\d+/);
+            const currentCount = currentCountMatch ? parseInt(currentCountMatch[0]) : 0;
+            const productName = reviewCount.querySelector('strong')?.textContent || 'this product';
+            reviewCount.textContent = `${currentCount + 1} reviews for ${productName}`;
+          } else {
+            console.warn('Review count element (.mb-20) not found. Skipping count update.');
+          }
+
+          form.reset();
+          alert('Review submitted successfully!');
+        } else {
+          alert(result.message || 'Failed to submit review.');
+        }
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        alert(`An error occurred while submitting your review: ${error.message}`);
+      }
+    });
+
+      function addToWishlist(productId) {
+        console.log("Adding to Wishlist:", productId);
+
+        $.ajax({
+          url: '/addToWishlist',
+          method: "POST",
+          data: { productId: productId },
+          success: (response) => {
+            console.log("Server Response:", response);
+            if (response.status) {
+              Swal.fire({
+                title: "Added to Wishlist",
+                text: "The Product has been added to your wishlist",
+                icon: "success",
+                timer: 2000 
+              });
+            } else {
+              Swal.fire({
+                title: "Already in Wishlist",
+                text: response.message,
+                icon: "info",
+                timer: 2000
+              });
+            }
+          },
+          // error: (error) => {
+          //   console.error("AJAX Error:", error);
+          //   Swal.fire({
+          //     title: "Error",
+          //     text: "There was an error adding the product to your wishlist",
+          //     icon: "error",
+          //     timer: 2000
+          //   });
+          // }
+          error: (error) => {
+  console.error("AJAX Error:", error);
+  Swal.fire({
+    title: "warning",
+    text: "There was an error adding the product to your wishlist. Please login to continue.",
+    icon: "warning",
+    confirmButtonText: "Login",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "/login"; // Adjust this to match your actual login route
+    }
+  });
+}
+
+        }); 
+      }
+
+    function addToCart(productId) {
+      console.log("Adding to Cart:", productId);
+
+      const quantity = document.getElementById('cart-quantity').value;
+
+      $.ajax({
+        url: '/addToCart',
+        method: "POST",
+        data: { productId: productId, quantity: quantity },
+        success: (response) => {
+          console.log("Server Response:", response);
+          if (response.status) {
+            Swal.fire({
+              title: "Added to Cart",
+              text: "The product has been added to your cart",
+              icon: "success",
+              timer: 2000
+            });
+          // } else {
+          //   Swal.fire({
+          //     title: "Error ",
+          //     text: response.message || "Failed to add product to cart",
+          //     text: response.message || "please login to add product to cart",
+          //     icon: "warning",
+          //     timer: 2000
+          //   });
+          // }
+        } else {
+  Swal.fire({
+    title: "Error",
+    text: response.message || "Please login to add product to cart",
+    icon: "warning",
+    confirmButtonText: "Login",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "/login"; // Or whatever your login route is
+    }
+  });
+}
+
+        },
+        error: (error) => {
+          console.error("AJAX Error:", error);
+          Swal.fire({
+            title: "Error",
+            text: "There was an error adding the product to your cart",
+            icon: "error",
+            timer: 2000
+          });
+        }
+      });
+    }
+  </script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <script>
+    // Toastr configuration
+    toastr.options = {
+      closeButton: true,
+      progressBar: true,
+      positionClass: 'toast-top-right',
+      timeOut: 2000,
+      extendedTimeOut: 1000,
+      showMethod: 'fadeIn',
+      hideMethod: 'fadeOut',
+      showDuration: 300,
+      hideDuration: 300
+    };
+  
+    var modal = document.getElementById("scaleModal");
+    var scaleLink = document.getElementById("scale-link");
+    var span = document.getElementsByClassName("close")[0];
+  
+    scaleLink.addEventListener("click", function() {
+      modal.style.display = "block";
+    });
+  z
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+  
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  
+    document.getElementById('review-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData);
+      console.log('Submitting review:', data);
+  
+      try {
+        const response = await fetch('/submitReview', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: JSON.stringify(data)
+        });
+  
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          console.error('Non-JSON response:', text);
+          throw new Error('Server returned non-JSON response. Please check if you are logged in.');
+        }
+  
+        const result = await response.json();
+        console.log('Server response:', result);
+  
+        if (result.success) {
+          const reviewContainer = document.getElementById('reviews-container');
+          const reviewCount = document.querySelector('#tab_02 .mb-20');
+  
+          const newReview = document.createElement('div');
+          newReview.className = 'ps-review';
+          newReview.innerHTML = `
+            <div class="ps-review__thumbnail"><img src="/images/user/default.jpg" alt=""></div>
+            <div class="ps-review__content">
+              <header>
+                <select class="ps-rating" disabled>
+                  ${[...Array(5)].map((_, i) => `<option value="${i + 1}" ${result.review.rating === i + 1 ? 'selected' : ''}>${i + 1}</option>`).join('')}
+                </select>
+                <p>By <a href="#">${result.review.user}</a> - ${new Date(result.review.createdAt).toLocaleDateString()}</p>
+              </header>
+              <p>${result.review.comment}</p>
+            </div>
+          `;
+          reviewContainer.prepend(newReview);
+  
+          if (reviewCount) {
+            const currentCountMatch = reviewCount.textContent.match(/\d+/);
+            const currentCount = currentCountMatch ? parseInt(currentCountMatch[0]) : 0;
+            const productName = reviewCount.querySelector('strong')?.textContent || 'this product';
+            reviewCount.textContent = `${currentCount + 1} reviews for ${productName}`;
+          } else {
+            console.warn('Review count element (.mb-20) not found. Skipping count update.');
+          }
+  
+          form.reset();
+          toastr.success('Review submitted successfully!');
+        } else {
+          toastr.error(result.message || 'Failed to submit review.');
+        }
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        toastr.error(`An error occurred: ${error.message}`);
+      }
+    });
+  
+    function addToWishlist(productId) {
+      console.log("Adding to Wishlist:", productId);
+  
+      $.ajax({
+        url: '/addToWishlist',
+        method: "POST",
+        data: { productId: productId },
+        success: (response) => {
+          console.log("Server Response:", response);
+          if (response.status) {
+            toastr.success('The Product has been added to your wishlist', 'Added to Wishlist');
+          } else {
+            toastr.info(response.message, 'Already in Wishlist');
+          }
+        },
+        error: (error) => {
+          console.error("AJAX Error:", error);
+          toastr.warning('Please login to add product to wishlist', 'Login Required', {
+            onClick: () => {
+              window.location.href = "/login";
+            }
+          });
+        }
+      });
+    }
+  
+  function addToCart(productId) {
+  console.log("Adding to Cart:", productId);
+
+  const quantityInput = document.getElementById('cart-quantity');
+  const quantity = parseInt(quantityInput.value);
+
+  // Validate quantity
+  if (isNaN(quantity) || quantity < 1) {
+    toastr.error('Please enter a valid quantity', 'Invalid Quantity');
+    return;
+  }
+  if (quantity > parseInt(quantityInput.max)) {
+    toastr.error(`Maximum ${quantityInput.max} items allowed`, 'Quantity Exceeded');
+    return;
+  }
+
+  // Trigger UI feedback (e.g., add 'adding' class to button)
+  const cartButton = document.querySelector(`#cart-toggle-${productId} + .cart-button`);
+  cartButton.classList.add('adding');
+
+  $.ajax({
+    url: '/addToCart',
+    method: 'POST',
+    data: { productId, quantity },
+    headers: {
+      'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content') // Add CSRF token if required
+    },
+    success: (response) => {
+      console.log('Server Response:', response);
+      if (response.status) {
+        cartButton.classList.add('success');
+        toastr.success(response.message || 'The product has been added to your cart', 'Added to Cart');
+        setTimeout(() => {
+          cartButton.classList.remove('adding', 'success');
+        }, 1500); // Match animation duration
+      } else {
+        cartButton.classList.remove('adding');
+        if (response.message === 'User not authenticated') {
+          toastr.warning('Please login to add product to cart', 'Login Required', {
+            onClick: () => {
+              window.location.href = '/login';
+            }
+          });
+        } else if (response.error === 'max_limit') {
+          toastr.error(`Maximum ${response.maxQuantityLimit || 5} items allowed per product`, 'Max Limit Reached');
+        } else if (response.error === 'out_of_stock') {
+          toastr.error(response.message || 'Product is out of stock', 'Out of Stock');
+        } else {
+          toastr.error(response.message || 'Failed to add product to cart', 'Error');
+        }
+      }
+    },
+    error: (error) => {
+      console.error('AJAX Error:', error);
+      cartButton.classList.remove('adding');
+      toastr.error('An error occurred while adding to cart', 'Error');
+    }
+  });
+}
+  </script>
+</main>
+<%- include("../../views/partials/user/footer") %>  

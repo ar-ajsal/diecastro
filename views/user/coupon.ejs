@@ -1,0 +1,444 @@
+<%- include("../../views/partials/user/header") %>
+
+<title>Diecastro My Coupons</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<style>
+    /* Theme Variables */
+    :root {
+        --primary-bg: #ffffff;
+        --secondary-bg: #f8f8f8;
+        --text-primary: #1a1a1a;
+        --text-secondary: #333333;
+        --accent-color: #2AC37D;
+        --accent-dark: #219653;
+        --border-color: #e0e0e0;
+        --shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        --shadow-hover: 0 6px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Reset and Base Styles */
+    body {
+        background-color: var(--primary-bg);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        overflow-x: hidden;
+        line-height: 1.6;
+        font-size: 1.1rem;
+    }
+
+    /* Breadcrumb Section */
+    .breadcrumb-section {
+        background: linear-gradient(135deg, var(--secondary-bg), var(--primary-bg));
+        border-bottom: 1px solid var(--border-color);
+        padding: 2.5rem 0;
+    }
+
+    .breadcrumb-text p {
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+    }
+
+    .breadcrumb-text h1 {
+        font-size: 2.75rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    /* Navigation */
+    .navbar {
+        background-color: var(--primary-bg);
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.25rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: var(--shadow);
+    }
+
+    .navbar-brand {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        transition: color 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+        color: var(--accent-dark);
+    }
+
+    .navbar a {
+        color: var(--text-primary);
+        text-decoration: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1.15rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+
+    .navbar a i {
+        margin-right: 0.75rem;
+        font-size: 1.2rem;
+    }
+
+    .navbar a:hover,
+    .navbar .active {
+        background-color: var(--accent-color);
+        color: #ffffff;
+        border-radius: 8px;
+    }
+
+    /* Main Content */
+    .main-content {
+        padding: 3rem;
+        background: var(--secondary-bg);
+        border-radius: 14px;
+        margin: 2.5rem 1.5rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease;
+    }
+
+    .main-content:hover {
+        transform: translateY(-4px);
+    }
+
+    .main-content h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 2.5rem;
+        position: relative;
+    }
+
+    .main-content h2::after {
+        content: '';
+        width: 60px;
+        height: 4px;
+        background: var(--accent-color);
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+    }
+
+    /* Coupon Card */
+    .coupon-card {
+        background: var(--primary-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        margin-bottom: 2rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow);
+    }
+
+    .coupon-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .coupon-header {
+        background: var(--secondary-bg);
+        padding: 1.75rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .coupon-header h5 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .coupon-header h5 span {
+        margin-right: 0.75rem;
+        font-size: 1.25rem;
+    }
+
+    .coupon-body {
+        padding: 1.75rem;
+    }
+
+    .coupon-body p {
+        font-size: 1.15rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem;
+    }
+
+    .coupon-body .input-group {
+        display: flex;
+        align-items: center;
+        max-width: 300px;
+    }
+
+    .coupon-body input {
+        border: 1px solid var(--border-color);
+        border-radius: 8px 0 0 8px;
+        padding: 0.75rem;
+        flex-grow: 1;
+        font-size: 1rem;
+        outline: none;
+        background: #f9fafb;
+    }
+
+    .coupon-body button {
+        background: var(--accent-color);
+        color: #ffffff;
+        border: none;
+        border-radius: 0 8px 8px 0;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .coupon-body button:hover {
+        background: var(--accent-dark);
+    }
+
+    .status-text {
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 1rem;
+    }
+
+    .status-text.text-success {
+        color: var(--accent-color);
+    }
+
+    .status-text.text-danger {
+        color: #e63946;
+    }
+
+    /* No Coupons */
+    .no-coupons {
+        text-align: center;
+        padding: 5rem 0;
+    }
+
+    .no-coupons i {
+        font-size: 3.5rem;
+        color: var(--accent-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .no-coupons h3 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .no-coupons p {
+        color: var(--text-secondary);
+        font-size: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        body {
+            font-size: 1rem;
+        }
+
+        .navbar {
+            padding: 1rem;
+        }
+
+        .navbar a {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+        }
+
+        .navbar-brand {
+            font-size: 1.75rem;
+        }
+
+        .main-content {
+            margin: 1.5rem 1rem;
+            padding: 2rem;
+        }
+
+        .main-content h2 {
+            font-size: 2rem;
+        }
+
+        .breadcrumb-text h1 {
+            font-size: 2.25rem;
+        }
+
+        .coupon-header,
+        .coupon-body {
+            padding: 1.25rem;
+        }
+
+        .coupon-header h5 {
+            font-size: 1.3rem;
+        }
+
+        .coupon-body p {
+            font-size: 1rem;
+        }
+
+        .coupon-body .input-group {
+            max-width: 100%;
+        }
+
+        .coupon-body input,
+        .coupon-body button {
+            font-size: 0.9rem;
+            padding: 0.6rem;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+        }
+
+        .no-coupons h3 {
+            font-size: 1.75rem;
+        }
+
+        .no-coupons p {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+
+<body>
+    <!-- Breadcrumb Section -->
+    <div class="breadcrumb-section py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <div class="breadcrumb-text">
+                        <p>Your Savings</p>
+                        <h1>My Coupons</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Horizontal Navigation -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Diecastro</a>
+            <div class="d-flex flex-wrap">
+                <a href="/userProfile"><i class="fas fa-user"></i> Dashboard</a>
+                <a href="/orders"><i class="fas fa-history"></i> Order History</a>
+                <a href="/address"><i class="fas fa-map-marker-alt"></i> Address Book</a>
+                <a href="/editProfile"><i class="fas fa-cog"></i> Account Settings</a>
+                <a href="/wallet"><i class="fa-solid fa-wallet"></i> Wallet</a>
+                <a href="/coupons" class="active"><i class="fa-solid fa-ticket"></i> Coupons</a>
+                <a href="#" onclick="confirmLogout(event)"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h2>My Coupons</h2>
+
+        <% if (coupons && coupons.length > 0) { %>
+            <% coupons.forEach((coupon, index) => { %>
+                <div class="coupon-card">
+                    <div class="coupon-header">
+                        <h5><span>🎉</span>Congratulations! ₹<%= coupon.offerPrice %> off your next purchase!</h5>
+                    </div>
+                    <div class="coupon-body">
+                        <p>Minimum Purchase Amount: ₹<%= coupon.minimumPrice %></p>
+                        <p>Expires On: <%= new Date(coupon.expireOn).toLocaleDateString('en-IN') %></p>
+                        <div class="input-group">
+                            <input type="text" value="<%= coupon.name %>" id="coupon<%= index %>" readonly>
+                            <% if (!coupon.isUsed) { %>
+                                <button onclick="copyToClipboard('coupon<%= index %>')">Copy Coupon</button>
+                            <% } %>
+                        </div>
+                        <p class="status-text <%= coupon.isUsed ? 'text-danger' : 'text-success' %>">
+                            <%= coupon.usageMessage %>
+                        </p>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="no-coupons">
+                <i class="fas fa-ticket-alt"></i>
+                <h3>No Coupons Available</h3>
+                <p>Check back later for exciting offers!</p>
+                <a href="/shop" class="btn btn-primary mt-2">Start Shopping</a>
+            </div>
+        <% } %>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function copyToClipboard(id) {
+            const copyText = document.getElementById(id);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+
+            Swal.fire({
+                title: 'Coupon Copied!',
+                text: 'You have successfully copied the coupon.',
+                icon: 'success',
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Go to Cart',
+                reverseButtons: true,
+                confirmButtonColor: '#2AC37D',
+                cancelButtonColor: '#6B7280'
+            }).then((result) => {
+                if (result.isDismissed) {
+                    window.location.href = '/cart';
+                }
+            });
+        }
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You will be logged out!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#2AC37D",
+                cancelButtonColor: "#e63946",
+                confirmButtonText: "Yes, Logout"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/logout";
+                }
+            });
+        }
+    </script>
+
+    <!-- Other Scripts -->
+    <script src="assets/js/jquery-1.11.3.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery.countdown.js"></script>
+    <script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+    <script src="assets/js/waypoints.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="assets/js/jquery.meanmenu.min.js"></script>
+    <script src="assets/js/sticker.js"></script>
+    <script src="assets/js/main.js"></script>
+
+<%- include("../../views/partials/user/footer") %>
+</body>

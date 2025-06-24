@@ -1,0 +1,557 @@
+<%- include("../../views/partials/user/header") %>
+
+    <title>User Profile - Diecastro</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        /* Define theme variables */
+:root {
+    --primary-bg: #ffffff;
+    --secondary-bg: #f8f8f8;
+    --text-primary: #1a1a1a;
+    --text-secondary: #333333;
+    --accent-color: #2AC37D;
+    --accent-dark: #219653;
+    --border-color: #e0e0e0;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* Reset and base styles */
+body {
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+    line-height: 1.6;
+    font-size: 1.1rem; /* Base font size for better visibility */
+}
+
+/* Breadcrumb Section */
+.breadcrumb-section {
+    background: linear-gradient(135deg, var(--secondary-bg), var(--primary-bg));
+    border-bottom: 1px solid var(--border-color);
+    padding: 2.5rem 0;
+}
+
+.breadcrumb-text p {
+    color: var(--text-secondary);
+    font-size: 1.2rem; /* Increased for visibility */
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.breadcrumb-text h1 {
+    font-size: 2.75rem; /* Larger heading */
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--primary-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+}
+
+.navbar-brand {
+    font-size: 2rem; /* Increased for prominence */
+    font-weight: 700;
+    color: var(--accent-color);
+    transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: var(--accent-dark);
+}
+
+.navbar a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.15rem; /* Larger font size */
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.navbar a i {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.navbar a:hover,
+.navbar .active {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border-radius: 8px;
+}
+
+/* Profile Container */
+.profile-container {
+    padding: 3rem;
+    background: var(--secondary-bg);
+    border-radius: 14px;
+    margin: 2.5rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.profile-container:hover {
+    transform: translateY(-4px);
+}
+
+/* User Info */
+.user-info-card {
+    background: var(--primary-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+}
+
+.user-info-card h2 {
+    font-size: 2.25rem; /* Larger heading */
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.user-info-card h2::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background: var(--accent-color);
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+}
+
+.user-info-card p {
+    font-size: 1.25rem; /* Larger for readability */
+    color: var(--text-secondary);
+    margin: 0.75rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.user-info-card img {
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--accent-color);
+    color: #ffffff;
+    padding: 0.85rem 1.75rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem; /* Larger button text */
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+}
+
+/* Stats Cards */
+.stats-card {
+    background: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.stats-card h5 {
+    font-size: 2rem; /* Larger for emphasis */
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.stats-card p {
+    font-size: 1.15rem; /* Increased for visibility */
+    color: var(--text-secondary);
+}
+
+/* Orders */
+.order-card {
+    background: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.order-card h5 {
+    font-size: 1.5rem; /* Larger order title */
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.order-card p {
+    font-size: 1.15rem; /* Increased for readability */
+}
+
+.order-card .text-sm {
+    font-size: 1rem; /* Adjusted for consistency */
+    color: var(--text-secondary);
+}
+
+.order-card h4 {
+    font-size: 1.25rem; /* Larger price */
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.order-card .px-2.py-1 {
+    padding: 0.6rem 1.2rem;
+    border-radius: 24px;
+    font-size: 1rem; /* Larger status text */
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.order-card .bg-green-100 {
+    background-color: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+.order-card .bg-red-100 {
+    background-color: #e63946 !important;
+    color: #ffffff !important;
+}
+
+.order-card .bg-yellow-100 {
+    background-color: #f4a261 !important;
+    color: #ffffff !important;
+}
+
+/* Refer Section */
+.refer-section {
+    background: var(--primary-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.refer-section h1 {
+    font-size: 2.25rem; /* Larger heading */
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.refer-code-box {
+    display: inline-flex;
+    align-items: center;
+    background: var(--secondary-bg);
+    padding: 0.85rem 1.75rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem; /* Larger refer code */
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* Typography */
+p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    body {
+        font-size: 1rem;
+    }
+
+    .navbar {
+        padding: 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.75rem;
+    }
+
+    .navbar a {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+
+    .profile-container {
+        margin: 1.5rem 1rem;
+        padding: 2rem;
+    }
+
+    .breadcrumb-text h1 {
+        font-size: 2.25rem;
+    }
+
+    .user-info-card {
+        padding: 1.5rem;
+    }
+
+    .user-info-card h2 {
+        font-size: 1.75rem;
+    }
+
+    .user-info-card p {
+        font-size: 1.1rem;
+    }
+
+    .stats-card h5 {
+        font-size: 1.75rem;
+    }
+
+    .stats-card p {
+        font-size: 1rem;
+    }
+
+    .order-card h5 {
+        font-size: 1.25rem;
+    }
+
+    .order-card p {
+        font-size: 1rem;
+    }
+
+    .order-card h4 {
+        font-size: 1.1rem;
+    }
+
+    .order-card .px-2.py-1 {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .refer-section h1 {
+        font-size: 1.75rem;
+    }
+
+    .refer-code-box {
+        font-size: 1.25rem;
+    }
+}
+    </style>
+
+    <body>
+        <!-- Breadcrumb Section -->
+        <div class="breadcrumb-section py-4" style="background: var(--secondary-bg); border-bottom: 1px solid var(--border-color);">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2 text-center">
+                        <div class="breadcrumb-text">
+                            <p>It's an emotion, buying a car</p>
+                            <h1>Profile</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation -->
+        <nav class="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Diecastro</a>
+                <div class="d-flex flex-wrap">
+                    <a href="/userProfile" class="active"><i class="fas fa-user"></i> Dashboard</a>
+                    <a href="/orders"><i class="fas fa-history"></i> Order History</a>
+                    <a href="/address"><i class="fas fa-map-marker-alt"></i> Address Book</a>
+                    <a href="/editProfile"><i class="fas fa-cog"></i> Account Settings</a>
+                    <a href="/wallet"><i class="fa-solid fa-wallet"></i> Wallet</a>
+                    <a href="/coupons"><i class="fa-duotone fa-solid fa-ticket"></i> Coupons</a>
+                    <a href="#" onclick="confirmAdminLogout(event)"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="container py-4">
+            <div class="profile-container">
+                <!-- User Info -->
+                <div class="d-flex align-items-center mb-4">
+                    <div class="user-info-card flex-grow-1">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <!-- <img src="<%= user.image && user.image.length ? user.image[0] : 'assets/img/default dp.jpg' %>"
+                                    class="rounded-circle" width="80" height="80" alt="Profile"> -->
+                            </div>
+                            <div>
+                                <h2>User Details</h2>
+                                <p><i class="fas fa-user"></i> Name: <%= user.name %></p>
+                                <p><i class="fas fa-envelope"></i> Email: <%= user.email %></p>
+                                <p><i class="fas fa-phone"></i> Phone: <%= user.phone %></p>
+                                <button class="btn-primary mt-2" onclick="window.location.href='/editProfile'">Edit Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="stats-card">
+                            <h5><%= totalOrders %></h5>
+                            <p class="mb-0">Total Orders</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="stats-card">
+                            <h5>₹<%= totalSpending %></h5>
+                            <p class="mb-0">Total Spending</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="mt-4">
+                    <h3 class="mb-3 text-lg font-semibold">Recent Orders</h3>
+                    <% if (orders.length < 1) { %>
+                        <div class="order-card">
+                            <h3>No orders history</h3>
+                        </div>
+                    <% } %>
+                    <% orders.forEach(order => { %>
+                        <div class="order-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="text-md font-medium mb-1">Order #<%= order.orderId %></h5>
+                                    <p class="text-sm"><%= new Date(order.createdAt).toLocaleDateString() %></p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="px-2 py-1 text-sm font-semibold rounded
+                                        <%= order.status === 'delivered' 
+                                            ? 'bg-green-100 text-green-700' 
+                                            : order.status === 'returned' || order.status === 'cancelled' 
+                                                ? 'bg-red-100 text-red-700' 
+                                                : 'bg-yellow-100 text-yellow-700' %>">
+                                        <%= order.status %>
+                                    </span>
+                                    <h4 class="mt-1 text-md font-bold">₹<%= order.price %></h4>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <!-- Primary Address -->
+                <div class="mt-4">
+                    <h3 class="mb-3 text-lg font-semibold">Primary Address</h3>
+                    <% if (addresses) { %>
+                        <% let address = addresses.address[0]; %>
+                        <div class="order-card">
+                            <h3><%= address.name %></h3>
+                            <p><%= address.landMark %></p>
+                            <p><%= address.city %>, <%= address.state %> - <%= address.pincode %></p>
+                            <p>Phone: <%= address.phone %></p>
+                            <p>Address Type: <%= address.addressType %></p>
+                            <button class="btn-primary mt-2" onclick="window.location.href='/address'">Edit Address</button>
+                        </div>
+                    <% } else { %>
+                        <div class="order-card">
+                            <h3>No address</h3>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Refer and Earn Section (Commented Out) -->
+                <!-- 
+                <div class="refer-section mt-4">
+                    <h1>Invite Your Friends and Earn Rewards!</h1>
+                    <div class="refer-code-box">
+                        <span id="referCode"><%= user.referCode %></span>
+                    </div>
+                    <button onclick="copyReferCode()" class="btn-primary">Copy Refer Code</button>
+                    <p style="font-size: large;">Share your code with your friends and earn ₹500 for every successful signup!</p>
+                </div>
+                -->
+            </div>
+        </main>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SweetAlert2 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            function confirmAdminLogout(event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You will be logged out!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Logout"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/logout";
+                    }
+                });
+            }
+
+            function copyReferCode() {
+                const referCode = document.getElementById('referCode').innerText;
+                navigator.clipboard.writeText(referCode)
+                    .then(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Copied!',
+                            text: `Referral code "${referCode}" copied to clipboard!`,
+                            showConfirmButton: false,
+                            timer: 1500,
+                            background: '#ffffff',
+                            color: '#333333'
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Failed to copy the code!',
+                            background: '#ffffff',
+                            color: '#333333'
+                        });
+                    });
+            }
+        </script>
+        <%- include("../../views/partials/user/footer") %>
+    </body>

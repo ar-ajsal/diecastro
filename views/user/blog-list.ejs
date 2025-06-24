@@ -1,0 +1,116 @@
+<%-include("../../views/partials/user/header")%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog List</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+  <main class="ps-main">
+    <div class="ps-blog-grid pt-80 pb-80">
+      <div class="ps-container">
+        <div class="row">
+          <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+            <% if (blogs && blogs.length > 0) { %>
+              <% blogs.forEach(blog => { %>
+                <div class="ps-post--list mb-30">
+                  <div class="ps-post__thumbnail">
+                    <a class="ps-post__overlay" href="/blogs/<%= blog.slug %>"></a>
+                    <img src="<%= blog.image %>" alt="<%= blog.title %>">
+                  </div>
+                  <div class="ps-post__content">
+                    <a class="ps-post__title" href="/blogs/<%= blog.slug %>"><%= blog.title %></a>
+                    <p class="ps-post__meta">
+                      <span>By: <a class="mr-5" href="/blogs"><%= blog.author %></a></span> -
+                      <span class="ml-5"><%= new Date(blog.date).toLocaleDateString() %></span>
+                    </p>
+                    <p><%= blog.content.substring(0, 200) %>...</p>
+                    <a class="ps-morelink" href="/blogs/<%= blog.slug %>">Read more<i class="fa fa-long-arrow-right"></i></a>
+                  </div>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p>No blogs found.</p>
+            <% } %>
+            <div class="mt-30">
+              <div class="ps-pagination">
+                <ul class="pagination">
+                  <% if (currentPage > 1) { %>
+                    <li><a href="/blogs?page=<%= currentPage - 1 %>&view=<%= view %>&search=<%= search %>&tag=<%= tag %>&category=<%= category %>"><i class="fa fa-angle-left"></i></a></li>
+                  <% } %>
+                  <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="<%= currentPage === i ? 'active' : '' %>"><a href="/blogs?page=<%= i %>&view=<%= view %>&search=<%= search %>&tag=<%= tag %>&category=<%= category %>"><%= i %></a></li>
+                  <% } %>
+                  <% if (currentPage < totalPages) { %>
+                    <li><a href="/blogs?page=<%= currentPage + 1 %>&view=<%= view %>&search=<%= search %>&tag=<%= tag %>&category=<%= category %>"><i class="fa fa-angle-right"></i></a></li>
+                  <% } %>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <aside class="ps-widget--sidebar ps-widget--search">
+              <form class="ps-search--widget" action="/blogs" method="get">
+                <input class="form-control" type="text" name="search" placeholder="Search posts..." value="<%= search %>">
+                <input type="hidden" name="view" value="<%= view %>">
+                <button><i class="ps-icon-search"></i></button>
+              </form>
+            </aside>
+            <aside class="ps-widget--sidebar">
+              <div class="ps-widget__header">
+                <h3>Archive</h3>
+              </div>
+              <div class="ps-widget__content">
+                <ul class="ps-list--arrow">
+                  <li><a href="/blogs?view=<%= view %>">All Posts (<%= blogs ? blogs.length : 0 %>)</a></li>
+                </ul>
+              </div>
+            </aside>
+            <aside class="ps-widget--sidebar">
+              <div class="ps-widget__header">
+                <h3>Recent Posts</h3>
+              </div>
+              <div class="ps-widget__content">
+                <% if (recentBlogs && recentBlogs.length > 0) { %>
+                  <% recentBlogs.slice(0, 3).forEach(recentBlog => { %>
+                    <div class="ps-post--sidebar">
+                      <div class="ps-post__thumbnail">
+                        <a href="/blogs/<%= recentBlog.slug %>"></a>
+                        <img src="<%= recentBlog.image %>" alt="<%= recentBlog.title %>">
+                      </div>
+                      <div class="ps-post__content">
+                        <a class="ps-post__title" href="/blogs/<%= recentBlog.slug %>"><%= recentBlog.title %></a>
+                        <span><%= new Date(recentBlog.date).toLocaleDateString() %></span>
+                      </div>
+                    </div>
+                  <% }) %>
+                <% } else { %>
+                  <p>No recent posts available.</p>
+                <% } %>
+              </div>
+            </aside>
+            <aside class="ps-widget--sidebar">
+              <div class="ps-widget__header">
+                <h3>Tags</h3>
+              </div>
+              <div class="ps-widget__content">
+                <ul class="ps-tags">
+                  <% if (blogs && blogs.length > 0) { %>
+                    <% blogs.reduce((tags, blog) => [...new Set([...tags, ...(blog.tags || [])])], []).forEach(tag => { %>
+                      <li><a href="/blogs?tag=<%= tag %>&view=<%= view %>"><%= tag %></a></li>
+                    <% }) %>
+                  <% } %>
+                </ul>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
+<%-include("../../views/partials/user/footer")%>

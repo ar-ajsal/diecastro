@@ -1,0 +1,602 @@
+<%- include("../../views/partials/user/header") %>
+
+    <title>Diecastro Order History</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        /* Define theme variables */
+:root {
+    --primary-bg: #ffffff;
+    --secondary-bg: #f8f8f8;
+    --text-primary: #1a1a1a;
+    --text-secondary: #333333;
+    --accent-color: #2AC37D;
+    --accent-dark: #219653;
+    --border-color: #e0e0e0;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* Reset and base styles */
+body {
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+    line-height: 1.6;
+    font-size: 1.1rem; /* Base font size increased for better visibility */
+}
+
+/* Breadcrumb Section */
+.breadcrumb-section {
+    background: linear-gradient(135deg, var(--secondary-bg), var(--primary-bg));
+    border-bottom: 1px solid var(--border-color);
+    padding: 2.5rem 0;
+}
+
+.breadcrumb-text p {
+    color: var(--text-secondary);
+    font-size: 1.2rem; /* Increased for visibility */
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+}
+
+.breadcrumb-text h1 {
+    font-size: 2.75rem; /* Larger heading */
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--primary-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow);
+}
+
+.navbar-brand {
+    font-size: 2rem; /* Increased for prominence */
+    font-weight: 700;
+    color: var(--accent-color);
+    transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: var(--accent-dark);
+}
+
+.navbar a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.15rem; /* Larger font size */
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.navbar a i {
+    margin-right: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.navbar a:hover,
+.navbar .active {
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border-radius: 8px;
+}
+
+/* Main Content */
+.main-content {
+    padding: 3rem;
+    background: var(--secondary-bg);
+    border-radius: 14px;
+    margin: 2.5rem 1.5rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.main-content:hover {
+    transform: translateY(-4px);
+}
+
+.main-content h2 {
+    font-size: 2.5rem; /* Larger heading */
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.main-content h2::after {
+    content: '';
+    width: 60px;
+    height: 4px;
+    background: var(--accent-color);
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+}
+
+/* Order Card */
+.order-card {
+    background: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow);
+}
+
+.order-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.order-header {
+    background: var(--secondary-bg);
+    padding: 1.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.order-header small {
+    font-size: 1rem; /* Increased for readability */
+    color: var(--text-secondary);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.order-header .row > div {
+    font-size: 1.2rem; /* Larger text for order details */
+    color: var(--text-primary);
+}
+
+.order-body {
+    padding: 1.75rem;
+}
+
+.product-image {
+    width: 100px; /* Slightly larger image */
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.status-badge {
+    padding: 0.6rem 1.2rem;
+    border-radius: 24px;
+    font-size: 1rem; /* Larger badge text */
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.75px;
+    color: #ffffff;
+}
+
+.status-badge.bg-success {
+    background-color: var(--accent-color) !important;
+}
+
+.status-badge.bg-danger {
+    background-color: #e63946 !important;
+}
+
+.status-badge.bg-info {
+    background-color: #0077b6 !important;
+}
+
+.status-badge.bg-warning {
+    background-color: #f4a261 !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background: var(--accent-color);
+    color: #ffffff;
+    padding: 0.85rem 1.75rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem; /* Larger button text */
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background: #e63946;
+    color: #ffffff;
+    padding: 0.85rem 1.75rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: #d00000;
+    transform: translateY(-2px);
+}
+
+/* No Orders */
+.no-orders {
+    text-align: center;
+    padding: 5rem 0;
+}
+
+.no-orders i {
+    font-size: 3.5rem;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+.no-orders h3 {
+    font-size: 2rem; /* Larger text */
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.no-orders p {
+    color: var(--text-secondary);
+    font-size: 1.25rem; /* Increased for visibility */
+    margin-bottom: 2rem;
+}
+
+/* Typography */
+p, .order-body h5 {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-secondary);
+}
+
+.order-body h5 {
+    font-size: 1.5rem; /* Larger product name */
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.order-body p {
+    font-size: 1.15rem; /* Larger for readability */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    body {
+        font-size: 1rem;
+    }
+
+    .navbar {
+        padding: 1rem;
+    }
+
+    .navbar a {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.75rem;
+    }
+
+    .main-content {
+        margin: 1.5rem 1rem;
+        padding: 2rem;
+    }
+
+    .main-content h2 {
+        font-size: 2rem;
+    }
+
+    .breadcrumb-text h1 {
+        font-size: 2.25rem;
+    }
+
+    .order-header,
+    .order-body {
+        padding: 1.25rem;
+    }
+
+    .order-header small {
+        font-size: 0.9rem;
+    }
+
+    .order-header .row > div {
+        font-size: 1.1rem;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .status-badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .btn-primary,
+    .btn-danger {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+
+    .no-orders h3 {
+        font-size: 1.75rem;
+    }
+
+    .no-orders p {
+        font-size: 1.1rem;
+    }
+}
+    </style>
+
+    <body>
+        <!-- Breadcrumb Section -->
+        <div class="breadcrumb-section py-4" style="background: var(--secondary-bg); border-bottom: 1px solid var(--border-color);">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 offset-lg-2 text-center">
+                        <div class="breadcrumb-text">
+                            <p>your collections</p>
+                            <h1>Order History</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Navigation -->
+        <nav class="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Diecastro</a>
+                <div class="d-flex flex-wrap">
+                    <a href="/userProfile"><i class="fas fa-user"></i> Dashboard</a>
+                    <a href="/orders" class="active"><i class="fas fa-history"></i> Order History</a>
+                    <a href="/address"><i class="fas fa-map-marker-alt"></i> Address Book</a>
+                    <a href="/editProfile"><i class="fas fa-cog"></i> Account Settings</a>
+                    <a href="/wallet"><i class="fa-solid fa-wallet"></i> Wallet</a>
+                    <a href="/coupons"><i class="fa-duotone fa-solid fa-ticket"></i> Coupons</a>
+                    <a href="#" onclick="confirmAdminLogout(event)"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <h2>Your Orders</h2>
+
+            <% if (orders && orders.length > 0) { %>
+                <% orders.forEach(order => { %>
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="row align-items-center">
+                                <div class="col-md-3">
+                                    <small>ORDER PLACED</small><br>
+                                    <%= new Date(order.createdOn).toLocaleDateString() %>
+                                </div>
+                                <div class="col-md-3">
+                                    <small>TOTAL</small><br>
+                                    ₹<%= order.finalAmount %>
+                                </div>
+                                <div class="col-md-3">
+                                    <small>ORDER ID</small><br>
+                                    #<%= order.orderId %>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="status-badge 
+                                        <%= order.status === 'delivered' ? 'bg-success' :
+                                            order.status === 'cancelled' ? 'bg-danger' :
+                                            order.status === 'returned' ? 'bg-danger' :
+                                            order.status === 'shipped' ? 'bg-info' :
+                                            'bg-warning' %> text-white">
+                                        <%= order.status.toUpperCase() %>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="order-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="<%= order.orderedItems[0].product.productImage[0] %>" 
+                                         alt="<%= order.orderedItems[0].product.productName %>"
+                                         class="product-image">
+                                </div>
+                                <div class="col-md-6">
+                                    <h5><%= order.orderedItems[0].product.productName %></h5>
+                                    <p class="mb-0">Quantity: <%= order.orderedItems[0].quantity %></p>
+                                    <p>Price: ₹<%= order.orderedItems[0].price %></p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <a href="/order-details?orderId=<%= order.orderId %>" 
+                                       class="btn btn-primary btn-sm">View Details</a>
+                                    
+                                       <% if (order.status === 'delivered') { %>
+                                        <a href="/download-invoice/<%= order.orderId %>" class="btn btn-primary w-100 mt-3">Download Invoice</a>
+                                      <% } %>
+                                        
+
+                                    <!-- Action Buttons Based on Order Status -->
+                                    <% if (!['cancelled', 'delivered', 'returned', 'return_requested', 'return_denied'].includes(order.status)) { %>
+                                        <button onclick="cancelOrder('<%= order._id %>')" class="btn btn-danger w-100 mt-3">Cancel Order</button>
+                                    <% } %>
+
+                                    <% if (order.status === 'delivered') { %>
+                                        <button onclick="returnOrder('<%= order._id %>')" class="btn btn-outline-primary w-100 mt-3">Return Order</button>
+                                    <% } else if (order.status === 'return_requested') { %>
+                                        <div class="alert alert-info text-center mt-3">Return request is under review.</div>
+                                    <% } else if (order.status === 'return_denied') { %>
+                                        <div class="alert alert-danger text-center mt-3">Return request was denied.</div>
+                                    <% } else if (order.status === 'returned') { %>
+                                        <div class="alert alert-success text-center mt-3">Item has been returned.</div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="no-orders">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>No orders yet</h3>
+                    <p>When you place an order, it will appear here.</p>
+                    <a href="/shop" class="btn btn-primary mt-2">Start Shopping</a>
+                </div>
+            <% } %>
+            <% if (totalPages > 1) { %>
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-center mt-4">
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                      <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                        <a class="page-link" href="/orders?page=<%= i %>"><%= i %></a>
+                      </li>
+                    <% } %>
+                  </ul>
+                </nav>
+              <% } %>
+              
+        </main>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            async function cancelOrder(orderId) {
+                const { value: reason } = await Swal.fire({
+                    title: 'Cancel Order',
+                    input: 'textarea',
+                    inputLabel: 'Please provide a reason for cancellation',
+                    inputPlaceholder: 'Type your reason here...',
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                        if (!value) {
+                            return 'You need to provide a reason!';
+                        }
+                    }
+                });
+
+                if (reason) {
+                    try {
+                        const response = await fetch('/orders/cancel', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ orderId, reason }),
+                        });
+
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            await Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Order cancelled successfully',
+                                timer: 1500
+                            });
+                            location.reload();
+                        } else {
+                            throw new Error(data.message);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        await Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error.message || 'Failed to cancel order'
+                        });
+                    }
+                }
+            }
+
+            function confirmAdminLogout(event) {
+                event.preventDefault();
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You will be logged out!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, Logout"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/logout";
+                    }
+                });
+            }
+
+
+            async function returnOrder(orderId) {
+                const { value: reason } = await Swal.fire({
+                    title: 'Return Order',
+                    input: 'textarea',
+                    inputLabel: 'Reason for returning',
+                    inputPlaceholder: 'Type your reason here...',
+                    showCancelButton: true,
+                    inputValidator: (value) => !value && 'Please provide a reason!'
+                });
+
+                if (reason) {
+                    try {
+                        const response = await fetch(`/orders/return`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ reason, orderId })
+                        });
+
+                        const data = await response.json();
+                        if (data.success) {
+                            await Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Order return requested',
+                                timer: 1500
+                            });
+                            location.reload();
+                        } else {
+                            throw new Error(data.message);
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error.message || 'Failed to request return'
+                        });
+                    }
+                }
+            }
+        </script>
+
+        <!-- Other Scripts -->
+        <script src="assets/js/jquery-1.11.3.min.js"></script>
+        <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="assets/js/jquery.countdown.js"></script>
+        <script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+        <script src="assets/js/waypoints.js"></script>
+        <script src="assets/js/owl.carousel.min.js"></script>
+        <script src="assets/js/jquery.magnific-popup.min.js"></script>
+        <script src="assets/js/jquery.meanmenu.min.js"></script>
+        <script src="assets/js/sticker.js"></script>
+        <script src="assets/js/main.js"></script>
+
+        <%- include("../../views/partials/user/footer") %>
+    </body>

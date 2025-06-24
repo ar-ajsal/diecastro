@@ -1,0 +1,673 @@
+<%- include("../../views/partials/user/header") %>
+
+<title>Diecastro - Manage Addresses</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<style>
+:root {
+  --primary-bg: #ffffff;
+  --secondary-bg: #f8f8f8;
+  --text-primary: #1a1a1a;
+  --text-secondary: #333333;
+  --accent-color: #2AC37D;
+  --accent-dark: #219653;
+  --border-color: #e0e0e0;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+body {
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  overflow-x: hidden;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.breadcrumb-section {
+  background: linear-gradient(135deg, var(--secondary-bg), var(--primary-bg));
+  border-bottom: 1px solid var(--border-color);
+  padding: 2.5rem 0;
+}
+
+.breadcrumb-text p {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.breadcrumb-text h1 {
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.navbar {
+  background-color: var(--primary-bg);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+  color: var(--accent-dark);
+}
+
+.navbar a {
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.navbar a i {
+  margin-right: 0.75rem;
+  font-size: 1.2rem;
+}
+
+.navbar a:hover,
+.navbar .active {
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border-radius: 8px;
+}
+
+.main-content {
+  padding: 3rem;
+  background: var(--secondary-bg);
+  border-radius: 14px;
+  margin: 2.5rem 1.5rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease;
+}
+
+.main-content:hover {
+  transform: translateY(-4px);
+}
+
+.main-content h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.main-content h1::after {
+  content: '';
+  width: 60px;
+  height: 4px;
+  background: var(--accent-color);
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+}
+
+.address-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+}
+
+.address-card {
+  background: var(--primary-bg);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.address-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.address-card h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.address-card p {
+  margin: 0.5rem 0;
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+}
+
+.address-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: #ffffff;
+  padding: 0.85rem 1.75rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+}
+
+.btn-primary:disabled {
+  background: var(--border-color);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  background: #e63946;
+  color: #ffffff;
+  padding: 0.85rem 1.75rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+  background: #d62839;
+  transform: translateY(-2px);
+}
+
+.add-address-btn {
+  background: var(--accent-color);
+  color: #ffffff;
+  padding: 0.85rem 1.75rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.add-address-btn:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+}
+
+.modal-content {
+  background: var(--primary-bg);
+  margin: 5% auto;
+  padding: 2rem;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
+}
+
+.modal-content h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  background: var(--secondary-bg);
+  font-size: 1.1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.address-type {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.address-type label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+</style>
+
+<body>
+    <div class="breadcrumb-section py-4" style="background: var(--secondary-bg); border-bottom: 1px solid var(--border-color);">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2 text-center">
+                    <div class="breadcrumb-text">
+                        <p>Fresh and Organic</p>
+                        <h1>Manage Addresses</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Diecastro</a>
+            <div class="d-flex flex-wrap">
+                <a href="/userProfile"><i class="fas fa-user"></i> Dashboard</a>
+                <a href="/orders"><i class="fas fa-history"></i> Order History</a>
+                <a href="/address" class="active"><i class="fas fa-map-marker-alt"></i> Address Book</a>
+                <a href="/editProfile"><i class="fas fa-cog"></i> Account Settings</a>
+                <a href="/wallet"><i class="fa-solid fa-wallet"></i> Wallet</a>
+                <a href="/coupons"><i class="fa-duotone fa-solid fa-ticket"></i> Coupons</a>
+                <a href="#" onclick="confirmAdminLogout(event)"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1>Manage Addresses</h1>
+
+        <button class="add-address-btn mb-4" onclick="showAddForm()">
+            <i class="fas fa-plus"></i> Add New Address
+        </button>
+
+        <div class="address-container">
+            <% if (addresses) { %>
+                <% addresses.address.forEach(address => { %>
+                    <div class="address-card">
+                        <h3><%= address.name %></h3>
+                        <p><%= address.landMark %></p>
+                        <p><%= address.city %>, <%= address.state %> - <%= address.pincode %></p>
+                        <p>Phone: <%= address.phone %></p>
+                        <p>Address Type: <%= address.addressType %></p>
+
+                        <div class="address-actions">
+                            <button class="btn btn-primary" onclick="showEditForm('<%= address.id %>', '<%= address.name %>', '<%= address.phone %>', '<%= address.altPhone %>', '<%= address.pincode %>', '<%= address.landMark %>', '<%= address.city %>', '<%= address.state %>', '<%= address.addressType %>')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <form action="/delete-address/<%= address.id %>" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this address?')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </form>
+                            <% if (address.isDefault) { %>
+                                <button class="btn btn-primary" disabled>
+                                    <i class="fa-solid fa-map-pin"></i> Default
+                                </button>
+                            <% } else { %>
+                                <button class="btn btn-primary" onclick="setDefault('<%= address.id %>', '<%= address.name %>', '<%= address.phone %>', '<%= address.altPhone %>', '<%= address.pincode %>', '<%= address.landMark %>', '<%= address.city %>', '<%= address.state %>', '<%= address.addressType %>')">
+                                    <i class="fa-solid fa-map-pin"></i> Set Default
+                                </button>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="address-card">
+                    <h3>No addresses found</h3>
+                    <p>Add an address to get started.</p>
+                </div>
+            <% } %>
+        </div>
+
+        <div id="addressModal" class="modal">
+            <div class="modal-content">
+                <h2 id="modalTitle">Add New Address</h2>
+                <form id="addressForm" action="/add-address" method="POST">
+                    <input type="hidden" name="addressId" id="addressId">
+
+                    <div class="form-group">
+                        <label for="name">Full Name:</label>
+                        <input type="text" idistrutt
+
+System: text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="number" id="phone" name="phone" required maxlength="10">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="altPhone">Alternate Phone Number:</label>
+                        <input type="number" id="altPhone" name="altPhone" maxlength="10">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pincode">Pincode:</label>
+                        <input type="number" id="pincode" name="pincode" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="landMark">Landmark:</label>
+                        <input type="text" id="landMark" name="landMark" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city">City:</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">State:</label>
+                        <input type="text" id="state" name="state" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address Type:</label>
+                        <div class="address-type">
+                            <label>
+                                <input type="radio" name="addressType" value="home" required> Home
+                            </label>
+                            <label>
+                                <input type="radio" name="addressType" value="work"> Work
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" onclick="useCurrentLocation()" id="locationButton">
+                            <i class="fas fa-map-marker-alt"></i> Use My Current Location
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Save Address</button>
+                        <button type="button" class="btn btn-danger" onclick="closeModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <%- include("../../views/partials/user/footer") %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showAddForm() {
+            document.getElementById('modalTitle').textContent = 'Add New Address';
+            document.getElementById('addressForm').action = '/add-address';
+            document.getElementById('addressId').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('altPhone').value = '';
+            document.getElementById('pincode').value = '';
+            document.getElementById('landMark').value = '';
+            document.getElementById('city').value = '';
+            document.getElementById('state').value = '';
+            document.getElementsByName('addressType').forEach(radio => radio.checked = false);
+            document.getElementById('addressModal').style.display = 'block';
+        }
+
+        function setDefault(id, name, phone, altPhone, pincode, landMark, city, state, addressType) {
+            Swal.fire({
+                title: "Set as Default?",
+                text: "Are you sure you want to set this as your default address?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Set Default"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('/set-default-address', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ addressId: id })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: 'Default address set successfully',
+                                timer: 1500
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message || 'Failed to set default address'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while setting the default address'
+                        });
+                    });
+                }
+            });
+        }
+
+        function showEditForm(id, name, phone, altPhone, pincode, landMark, city, state, type) {
+            document.getElementById('modalTitle').textContent = 'Edit Address';
+            document.getElementById('addressForm').action = '/editAddress';
+            document.getElementById('addressId').value = id;
+            document.getElementById('name').value = name;
+            document.getElementById('phone').value = phone;
+            document.getElementById('altPhone').value = altPhone || '';
+            document.getElementById('pincode').value = pincode;
+            document.getElementById('landMark').value = landMark;
+            document.getElementById('city').value = city;
+            document.getElementById('state').value = state;
+            document.getElementsByName('addressType').forEach(radio => {
+                radio.checked = (radio.value === type);
+            });
+            document.getElementById('addressModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addressModal').style.display = 'none';
+        }
+
+        function confirmAdminLogout(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You will be logged out!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Logout"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "/logout";
+                }
+            });
+        }
+
+        function useCurrentLocation() {
+            const locationButton = document.getElementById('locationButton');
+            locationButton.disabled = true;
+            locationButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching Location...';
+
+            if (!navigator.geolocation) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Geolocation is not supported by your browser'
+                });
+                locationButton.disabled = false;
+                locationButton.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use My Current Location';
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    console.log(`Browser coordinates: Latitude=${latitude}, Longitude=${longitude}`);
+
+                    Swal.fire({
+                        title: 'Confirm Location',
+                        html: `Detected coordinates:<br>Latitude: ${latitude.toFixed(6)}<br>Longitude: ${longitude.toFixed(6)}<br><br>Fetching address...`,
+                        icon: 'info',
+                        showConfirmButton: false,
+                        allowOutsideClick: false
+                    });
+
+                    fetch('/get-address-from-coordinates', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ latitude, longitude })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        locationButton.disabled = false;
+                        locationButton.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use My Current Location';
+
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Confirm Fetched Address',
+                                html: `
+                                    <p><strong>City:</strong> ${data.address.city || 'N/A'}</p>
+                                    <p><strong>State:</strong> ${data.address.state || 'N/A'}</p>
+                                    <p><strong>Pincode:</strong> ${data.address.pincode || 'N/A'}</p>
+                                    <p><strong>Landmark:</strong> ${data.address.landMark || 'N/A'}</p>
+                                    <p><strong>Coordinates:</strong> Lat ${data.coordinates.latitude.toFixed(6)}, Lon ${data.coordinates.longitude.toFixed(6)}</p>
+                                    <p>Is this correct?</p>
+                                `,
+                                icon: 'question',
+                                showCancelButton: true,
+                                confirmButtonText: 'Use This Address',
+                                cancelButtonText: 'Edit Manually'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    document.getElementById('pincode').value = data.address.pincode || '';
+                                    document.getElementById('landMark').value = data.address.landMark || '';
+                                    document.getElementById('city').value = data.address.city || '';
+                                    document.getElementById('state').value = data.address.state || '';
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Address Populated',
+                                        text: 'Address fields filled with your current location. Please verify and edit if needed.',
+                                        timer: 2000
+                                    });
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: data.message || 'Failed to fetch address'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching address:', error);
+                        locationButton.disabled = false;
+                        locationButton.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use My Current Location';
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'An error occurred while fetching the address'
+                        });
+                    });
+                },
+                (error) => {
+                    let message = 'Unable to retrieve your location';
+                    if (error.code === error.PERMISSION_DENIED) {
+                        message = 'Location access denied. Please allow location access in your browser settings.';
+                    } else if (error.code === error.POSITION_UNAVAILABLE) {
+                        message = 'Location information is unavailable. Try enabling GPS or using a different network.';
+                    } else if (error.code === error.TIMEOUT) {
+                        message = 'The request to get your location timed out.';
+                    }
+                    console.error('Geolocation error:', error);
+                    locationButton.disabled = false;
+                    locationButton.innerHTML = '<i class="fas fa-map-marker-alt"></i> Use My Current Location';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: message
+                    });
+                },
+                {
+                    enableHighAccuracy: true, // Request high-accuracy GPS
+                    timeout: 10000, // 10 seconds timeout
+                    maximumAge: 0 // No cached position
+                }
+            );
+        }
+    </script>
+</body>

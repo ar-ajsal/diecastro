@@ -1,0 +1,665 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="CodePixar">
+    <meta name="description" content="Log in or Sign up for  to explore the miniature car models.">
+    <meta name="keywords" content="login, signup, diecastro, tech, gaming">
+    <title>diecastro - Log In / Sign Up</title>
+    <link rel="shortcut icon" href="/img/pc-logo.png">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --primary-color: #4EA685;
+            --secondary-color: #57B894;
+            --black: #000000;
+            --white: #ffffff;
+            --gray: #efefef;
+            --gray-2: #757575;
+            --facebook-color: #4267B2;
+            /* --google-color: #DB4437; */
+            --twitter-color: #1DA1F2;
+            --insta-color: #E1306C;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+        * {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            height: 100vh;
+        }
+
+        .col {
+            width: 50%;
+        }
+
+        .align-items-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .form-wrapper {
+            width: 100%;
+            max-width: 28rem;
+        }
+
+        .form {
+            padding: 1rem;
+            background-color: var(--white);
+            border-radius: 1.5rem;
+            width: 100%;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            transform: scale(0);
+            transition: .5s ease-in-out;
+            transition-delay: 1s;
+        }
+
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            font-size: 1.4rem;
+            color: var(--gray-2);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 3rem;
+            font-size: 1rem;
+            background-color: var(--gray);
+            border-radius: .5rem;
+            border: 0.125rem solid var(--white);
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border: 0.125rem solid var(--primary-color);
+        }
+
+        .form button {
+            cursor: pointer;
+            width: 100%;
+            padding: .6rem 0;
+            border-radius: .5rem;
+            border: none;
+            background-color: var(--primary-color);
+            color: var(--white);
+            font-size: 1.2rem;
+            outline: none;
+        }
+
+        .form p {
+            margin: 1rem 0;
+            font-size: .7rem;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .social-list {
+            margin: 2rem 0;
+            padding: 1rem;
+            border-radius: 1.5rem;
+            width: 100%;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            transform: scale(0);
+            transition: .5s ease-in-out;
+            transition-delay: 1.2s;
+        }
+
+        .social-list > div {
+            color: var(--white);
+            margin: 0 .5rem;
+            padding: .7rem;
+            cursor: pointer;
+            border-radius: .5rem;
+            transform: scale(0);
+            transition: .5s ease-in-out;
+        }
+
+        .social-list > div:nth-child(1) { transition-delay: 1.4s; }
+        .social-list > div:nth-child(2) { transition-delay: 1.6s; }
+        .social-list > div:nth-child(3) { transition-delay: 1.8s; }
+        .social-list > div:nth-child(4) { transition-delay: 2s; }
+
+        .social-list > div > i {
+            font-size: 1.5rem;
+            transition: .4s ease-in-out;
+        }
+
+        .social-list > div:hover i {
+            transform: scale(1.5);
+        }
+
+        .facebook-bg { background-color: var(--facebook-color); }
+        .google-bg { background-color: var(--google-color); }
+        .twitter-bg { background-color: var(--twitter-color); }
+        .insta-bg { background-color: var(--insta-color); }
+
+        .pointer { cursor: pointer; }
+
+        .container.sign-in .form.sign-in,
+        .container.sign-in .social-list.sign-in,
+        .container.sign-in .social-list.sign-in > div,
+        .container.sign-up .form.sign-up,
+        .container.sign-up .social-list.sign-up,
+        .container.sign-up .social-list.sign-up > div {
+            transform: scale(1);
+        }
+
+        .content-row {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 6;
+            width: 100%;
+        }
+
+        .text {
+            margin: 4rem;
+            color: var(--white);
+        }
+
+        .text h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin: 2rem 0;
+            transition: 1s ease-in-out;
+        }
+
+        .text p {
+            font-weight: 600;
+            transition: 1s ease-in-out;
+            transition-delay: .2s;
+        }
+
+        .img img {
+            width: 30vw;
+            transition: 1s ease-in-out;
+            transition-delay: .4s;
+        }
+
+        .text.sign-in h2,
+        .text.sign-in p,
+        .img.sign-in img {
+            transform: translateX(-250%);
+        }
+
+        .text.sign-up h2,
+        .text.sign-up p,
+        .img.sign-up img {
+            transform: translateX(250%);
+        }
+
+        .container.sign-in .text.sign-in h2,
+        .container.sign-in .text.sign-in p,
+        .container.sign-in .img.sign-in img,
+        .container.sign-up .text.sign-up h2,
+        .container.sign-up .text.sign-up p,
+        .container.sign-up .img.sign-up img {
+            transform: translateX(0);
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 300vw;
+            transform: translate(35%, 0);
+            background-image: linear-gradient(-45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            transition: 1s ease-in-out;
+            z-index: 6;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            border-bottom-right-radius: max(50vw, 50vh);
+            border-top-left-radius: max(50vw, 50vh);
+        }
+
+        .container.sign-in::before {
+            transform: translate(0, 0);
+            right: 50%;
+        }
+
+        .container.sign-up::before {
+            transform: translate(100%, 0);
+            right: 50%;
+        }
+
+        .error-message,
+        .backend-error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: left;
+            padding-left: 3rem;
+        }
+
+        .alert {
+            background: #ffe3e3;
+            color: #e63946;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        @media only screen and (max-width: 425px) {
+            .container::before,
+            .container.sign-in::before,
+            .container.sign-up::before {
+                height: 100vh;
+                border-bottom-right-radius: 0;
+                border-top-left-radius: 0;
+                z-index: 0;
+                transform: none;
+                right: 0;
+            }
+
+            .container.sign-in .col.sign-in,
+            .container.sign-up .col.sign-up {
+                transform: translateY(0);
+            }
+
+            .content-row {
+                align-items: flex-start !important;
+            }
+
+            .content-row .col {
+                transform: translateY(0);
+                background-color: unset;
+            }
+
+            .col {
+                width: 100%;
+                position: absolute;
+                padding: 2rem;
+                background-color: var(--white);
+                border-top-left-radius: 2rem;
+                border-top-right-radius: 2rem;
+                transform: translateY(100%);
+                transition: 1s ease-in-out;
+            }
+
+            .row {
+                align-items: flex-end;
+                justify-content: flex-end;
+            }
+
+            .form,
+            .social-list {
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            .text {
+                margin: 0;
+            }
+
+            .text p {
+                display: none;
+            }
+
+            .text h2 {
+                margin: .5rem;
+                font-size: 2rem;
+            }
+        }
+        .logo1 {
+  width: 90px; /* Adjust as needed */
+  height: 90px; /* Make sure it's a square */
+  border-radius: 50%;
+  object-fit: cover; /* Keeps image from stretching */
+  border: 2px solid #000; /* Optional: adds a border around the circle */ 
+  margin-bottom: 15px;
+}
+    </style>
+</head>
+<body>
+   
+    <div id="container" class="container sign-in">
+        <!-- FORM SECTION -->
+        <div class="row">
+            <!-- SIGN UP -->
+            <div class="col align-items-center flex-col sign-up">
+                <div class="form-wrapper align-items-center">
+                    <form id="signup-form" method="post" action="/signup">
+                        <div class="form sign-up">
+                            <% if(locals.message && message.length > 0 && locals.formType === 'signup'){ %>
+                                <div class="alert">
+                                    <%= message %>
+                                </div>
+                            <% } %>
+                            <div class="input-group">
+                                <i class='bx bxs-user'></i>
+                                <input type="text" placeholder="Full Name" id="signup-name" name="name" value="<%= locals.formData && formData.name ? formData.name : '' %>" required>
+                                <div id="error-signup-name" class="error-message"></div>
+                                <% if(locals.errors && errors.name){ %>
+                                    <div class="backend-error"><%= errors.name %></div>
+                                <% } %>
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bx-mail-send'></i>
+                                <input type="email" placeholder="Email" id="signup-email" name="email" value="<%= locals.formData && formData.email ? formData.email : '' %>" required>
+                                <div id="error-signup-email" class="error-message"></div>
+                                <% if(locals.errors && errors.email){ %>
+                                    <div class="backend-error"><%= errors.email %></div>
+                                <% } %>
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-phone'></i>
+                                <input type="tel" placeholder="Phone Number" id="signup-phone" name="phone" value="<%= locals.formData && formData.phone ? formData.phone : '' %>" required>
+                                <div id="error-signup-phone" class="error-message"></div>
+                                <% if(locals.errors && errors.phone){ %>
+                                    <div class="backend-error"><%= errors.phone %></div>
+                                <% } %>
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-lock-alt'></i>
+                                <input type="password" placeholder="Password" id="signup-password" name="password" required>
+                                <div id="error-signup-password" class="error-message"></div>
+                                <% if(locals.errors && errors.password){ %>
+                                    <div class="backend-error"><%= errors.password %></div>
+                                <% } %>
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-lock-alt'></i>
+                                <input type="password" placeholder="Confirm Password" id="signup-confirm-password" name="cPassword" required>
+                                <div id="error-signup-confirm-password" class="error-message"></div>
+                                <% if(locals.errors && errors.cPassword){ %>
+                                    <div class="backend-error"><%= errors.cPassword %></div>
+                                <% } %>
+                            </div>
+                            <button type="submit">Sign Up</button>
+                            <p>
+                                <span>Already have an account?</span>
+                                <b onclick="toggle()" class="pointer">Sign in here</b>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-wrapper">
+                    <div class="social-list align-items-center sign-up">
+                        <a href="/auth/google" class="google-bg flex-col align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg><h4>continue with google</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- SIGN IN -->
+            <div class="col align-items-center flex-col sign-in">
+                <div class="form-wrapper align-items-center">
+                    <form id="signin-form" method="post" action="/login">
+                        <div class="form sign-in">
+                            <% if(locals.message && message.length > 0 && locals.formType === 'login'){ %>
+                                <div class="alert">
+                                    <%= message %>
+                                </div>
+                            <% } %>
+                            <div class="input-group">
+                                <i class='bx bx-mail-send'></i>
+                                <input type="email" placeholder="Email" id="signin-email" name="email" value="<%= locals.formData && formData.email ? formData.email : '' %>" required>
+                                <div id="error-signin-email" class="error-message"></div>
+                                <% if(locals.errors && errors.email){ %>
+                                    <div class="backend-error"><%= errors.email %></div>
+                                <% } %>
+                            </div>
+                            <div class="input-group">
+                                <i class='bx bxs-lock-alt'></i>
+                                <input type="password" placeholder="Password" id="signin-password" name="password" required>
+                                <div id="error-signin-password" class="error-message"></div>
+                                <% if(locals.errors && errors.password){ %>
+                                    <div class="backend-error"><%= errors.password %></div>
+                                <% } %>
+                            </div>
+                            <button type="submit">Sign In</button>
+                            <p>
+                                <b><a href="/forgot-password" style="text-decoration: none; color: var(--primary-color);">Forgot password?</a></b>
+                            </p>
+                            <p>
+                                <span>Don't have an account?</span>
+                                <b onclick="toggle()" class="pointer">Sign up here</b>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+                <div class="form-wrapper">
+                    <div class="social-list align-items-center sign-in">
+                        <a href="/auth/google" class="google-bg flex-col align-items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                            <h4>continue with google    </h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- CONTENT SECTION -->
+        <div class="row content-row">
+            <div class="col align-items-center flex-col">
+                <div class="text sign-in">
+                    <h2>  <div class="header__logo">
+            <a class="ps-logo" href="/">
+              <img class="logo1" src="images/logo.png" alt="Sky Store Logo">
+            </a>
+          </div>Welcome to diecastro</h2>
+                </div>
+                <div class="img sign-in"></div>
+            </div>
+            <div class="col align-items-center flex-col">
+                <div class="img sign-up"></div>
+                <div class="text sign-up">
+                    <h2>  <div class="header__logo">
+            <a class="ps-logo" href="/">
+              <img class="logo1" src="images/logo.png" alt="Sky Store Logo">
+            </a>
+          </div>Join with us</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let container = document.getElementById('container');
+
+        const toggle = () => {
+            container.classList.toggle('sign-in');
+            container.classList.toggle('sign-up');
+        };
+
+        setTimeout(() => {
+            container.classList.add('sign-in');
+        }, 200);
+
+        // Signup Validation
+        function signupNameValidate() {
+            const nameval = document.getElementById('signup-name').value;
+            const namepattern = /^[a-zA-Z\s]{2,30}$/;
+            const error = document.getElementById('error-signup-name');
+            if (!nameval.trim()) {
+                error.style.display = 'block';
+                error.innerHTML = 'Please enter a valid name';
+                return false;
+            } else if (!namepattern.test(nameval)) {
+                error.style.display = 'block';
+                error.innerHTML = 'Name can only contain letters and spaces';
+                return false;
+            } else {
+                error.style.display = 'none';
+                error.innerHTML = '';
+                return true;
+            }
+        }
+
+        function signupEmailValidate() {
+            const emailval = document.getElementById('signup-email').value;
+            const emailpattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            const error = document.getElementById('error-signup-email');
+            if (!emailpattern.test(emailval)) {
+                error.style.display = 'block';
+                error.innerHTML = 'Please enter a valid email';
+                return false;
+            } else {
+                error.style.display = 'none';
+                error.innerHTML = '';
+                return true;
+            }
+        }
+
+        function signupPhoneValidate() {
+            const phoneval = document.getElementById('signup-phone').value;
+            const phonepattern = /^[0-9]{10}$/;
+            const error = document.getElementById('error-signup-phone');
+            if (!phoneval.trim()) {
+                error.style.display = 'block';
+                error.innerHTML = 'Please enter a valid phone number';
+                return false;
+            } else if (!phonepattern.test(phoneval)) {
+                error.style.display = 'block';
+                error.innerHTML = 'Phone number must be 10 digits';
+                return false;
+            } else {
+                error.style.display = 'none';
+                error.innerHTML = '';
+                return true;
+            }
+        }
+
+        function signupPasswordValidate() {
+            const passval = document.getElementById('signup-password').value;
+            const cpassval = document.getElementById('signup-confirm-password').value;
+            const alpha = /[a-zA-Z]/;
+            const digit = /\d/;
+            const errorPass = document.getElementById('error-signup-password');
+            const errorCPass = document.getElementById('error-signup-confirm-password');
+            if (!passval.trim()) {
+                errorPass.style.display = 'block';
+                errorPass.innerHTML = 'Please enter a password';
+                return false;
+            } else if (passval.length < 8) {
+                errorPass.style.display = 'block';
+                errorPass.innerHTML = 'Password must be at least 8 characters';
+                return false;
+            } else if (!alpha.test(passval) || !digit.test(passval)) {
+                errorPass.style.display = 'block';
+                errorPass.innerHTML = 'Password must contain letters and numbers';
+                return false;
+            } else {
+                errorPass.style.display = 'none';
+                errorPass.innerHTML = '';
+            }
+            if (passval !== cpassval) {
+                errorCPass.style.display = 'block';
+                errorCPass.innerHTML = 'Passwords do not match';
+                return false;
+            } else {
+                errorCPass.style.display = 'none';
+                errorCPass.innerHTML = '';
+                return true;
+            }
+        }
+
+        // Login Validation
+        function signinEmailValidate() {
+            const emailval = document.getElementById('signin-email').value;
+            const emailpattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            const error = document.getElementById('error-signin-email');
+            if (!emailpattern.test(emailval)) {
+                error.style.display = 'block';
+                error.innerHTML = 'Please enter a valid email';
+                return false;
+            } else {
+                error.style.display = 'none';
+                error.innerHTML = '';
+                return true;
+            }
+        }
+
+        function signinPasswordValidate() {
+            const passval = document.getElementById('signin-password').value;
+            const alpha = /[a-zA-Z]/;
+            const digit = /\d/;
+            const error = document.getElementById('error-signin-password');
+            if (!passval.trim()) {
+                error.style.display = 'block';
+                error.innerHTML = 'Please enter a password';
+                return false;
+            } else if (passval.length < 8) {
+                error.style.display = 'block';
+                error.innerHTML = 'Password must be at least 8 characters';
+                return false;
+            } else if (!alpha.test(passval) || !digit.test(passval)) {
+                error.style.display = 'block';
+                error.innerHTML = 'Password must contain letters and numbers';
+                return false;
+            } else {
+                error.style.display = 'none';
+                error.innerHTML = '';
+                return true;
+            }
+        }
+
+        // Form Submission Handlers
+        document.getElementById('signup-form').addEventListener('submit', (e) => {
+            const isNameValid = signupNameValidate();
+            const isEmailValid = signupEmailValidate();
+            const isPhoneValid = signupPhoneValidate();
+            const isPasswordValid = signupPasswordValidate();
+            if (!isNameValid || !isEmailValid || !isPhoneValid || !isPasswordValid) {
+                e.preventDefault();
+            }
+        });
+
+        document.getElementById('signin-form').addEventListener('submit', (e) => {
+            const isEmailValid = signinEmailValidate();
+            const isPasswordValid = signinPasswordValidate();
+            if (!isEmailValid || !isPasswordValid) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

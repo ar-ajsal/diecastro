@@ -1,0 +1,559 @@
+<%- include("../../views/partials/admin/header") %>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+<style>
+    :root {
+        --primary-color: #4f46e5; /* Indigo */
+   
+        --success-color: #10b981; /* Green */
+        --danger-color: #ef4444; /* Red */
+        --info-color: #3b82f6; /* Blue */
+        --warning-color: #f59e0b; /* Amber */
+        --light-gray: #e5e7eb; /* Soft gray */
+        --background-color: #f3f4f6; /* Light neutral */
+        --white: #ffffff; /* Clean white */
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        --transition: all 0.2s ease; /* Smooth transitions */
+        --accent-color: #a5b4fc; /* Light indigo */
+    }
+
+    body {
+        background-color: var(--background-color);
+        font-family: 'Inter', sans-serif;
+        color: var(--secondary-color);
+    }
+
+    .content-header {
+        padding: 1.5rem 0;
+        background-color: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    .content-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin: 0;
+        text-align: left;
+    }
+
+    .container {
+        margin-left: 20px; /* Match sidebar width */
+        padding: 2rem;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.5rem 0;
+        font-size: 0.9rem;
+        background-color: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+    .table thead tr {
+        background-color: var(--primary-color);
+        color: var(--white);
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .table thead th {
+        padding: 12px 15px;
+        vertical-align: middle;
+        border: 1px solid var(--light-gray);
+        white-space: nowrap;
+    }
+
+    .table tbody tr {
+        border-bottom: 1px solid var(--light-gray);
+        transition: var(--transition);
+    }
+
+    .table tbody tr:nth-of-type(even) {
+        background-color: rgba(243, 244, 246, 0.5);
+    }
+
+    .table tbody tr:hover {
+        background-color: rgba(165, 180, 252, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .table tbody td {
+        padding: 12px 15px;
+        text-align: center;
+        border: 1px solid var(--light-gray);
+        vertical-align: middle;
+        color: var(--secondary-color);
+    }
+
+    .search-form {
+        margin: 1.5rem auto;
+        max-width: 500px;
+    }
+
+    .input-group {
+        display: flex;
+        justify-content: center;
+    }
+
+    .search-input {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        border: 1px solid var(--light-gray);
+        border-radius: 8px 0 0 8px;
+        width: 70%;
+        background-color: var(--white);
+        color: var(--secondary-color);
+        transition: var(--transition);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .search-button {
+        padding: 0.75rem 1.5rem;
+        background: var(--primary-color);
+        color: var(--white);
+        border: none;
+        border-radius: 0 8px 8px 0;
+        cursor: pointer;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .search-button:hover {
+        background: var(--accent-color);
+        transform: translateY(-1px);
+    }
+
+    .btn {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        margin: 2px;
+        color: var(--white);
+        transition: var(--transition);
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow);
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 0.85rem;
+    }
+
+    .btn-info {
+        background: var(--info-color);
+    }
+
+    .btn-warning {
+        background: var(--warning-color);
+    }
+
+    .btn-danger {
+        background: var(--danger-color);
+    }
+
+    .btn-success {
+        background: var(--success-color);
+    }
+
+    .product-image {
+        border-radius: 4px;
+        object-fit: cover;
+        margin: 2px;
+        border: 1px solid var(--light-gray);
+        transition: var(--transition);
+    }
+
+    .product-image:hover {
+        transform: scale(1.05);
+    }
+
+    .pagination {
+        display: flex;
+        padding-left: 0;
+        list-style: none;
+        justify-content: center;
+        margin: 1.5rem 0;
+    }
+
+    .page-item {
+        margin: 0 2px;
+    }
+
+    .page-link {
+        padding: 8px 16px;
+        border: 1px solid var(--light-gray);
+        color: var(--secondary-color);
+        background: var(--white);
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+
+    .page-item.active .page-link {
+        background: var(--primary-color);
+        color: var(--white);
+        border-color: var(--primary-color);
+    }
+
+    .page-link:hover {
+        background: var(--accent-color);
+        color: var(--white);
+        border-color: var(--accent-color);
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            margin-left: 0;
+            padding: 1rem;
+        }
+
+        .table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .table thead th,
+        .table tbody td {
+            min-width: 100px;
+        }
+
+        .search-input {
+            width: 60%;
+        }
+    }
+
+    .bi-trash-fill {
+        color: var(--danger-color);
+        transition: var(--transition);
+    }
+
+    .bi-trash-fill:hover {
+        color: var(--accent-color);
+        transform: scale(1.2);
+    }
+
+    .text-white {
+        color: var(--white) !important;
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--secondary-color);
+    }
+
+    a:hover {
+        color: var(--primary-color);
+    }
+</style>
+
+<div class="content-header">
+    <h2 class="content-title">Products Management</h2>
+</div>
+<div class="container">
+    <form action="" method="get" class="search-form text-center mb-4">
+        <div class="input-group">
+            <input type="text" class="form-control search-input" placeholder="Search products or brands" name="search">
+            <button class="btn search-button" type="submit">Search</button>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product name</th>
+                    <th>Brand</th>
+                    <th>Category</th>
+                    <th>Sale Price</th>
+                    <th>Regular Price</th>
+                    <th>Offer</th>
+                    <th>Quantity</th>
+                    <th>Action</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i=data.length-1; i>=0; i--) { %>
+                <tr>
+                    <td>
+                        <% if(data[i].productImage && data[i].productImage.length > 0) { %>
+                            <% data[i].productImage.forEach(image => { %>
+                                <img src="/<%= image %>" alt="<%= data[i].productName %>" class="product-image" style="width: 50px; height: 50px; margin: 2px;">
+                            <% }); %>
+                        <% } else { %>
+                            <img src="/placeholder.svg" alt="No image" class="product-image" style="width: 50px; height: 50px;">
+                        <% } %>
+                    </td>
+                    <td><%= data[i].productName %></td>
+                    <td><%= data[i].brand %></td>
+                    <td><%= data[i].category ? data[i].category.name : 'N/A' %></td>
+                    <td><%= data[i].salePrice %></td>
+                    <td><%= data[i].regularPrice %></td>
+                    <td>
+                        <% if(data[i].productOffer) { %>
+                            <%= data[i].productOffer %>%
+                            <button class="btn btn-sm btn-warning" onclick="editOffer('<%= data[i]._id %>', <%= data[i].productOffer %>)">
+                                Edit
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="removeOffer('<%= data[i]._id %>')">
+                                Remove
+                            </button>
+                        <% } else { %>
+                            0%
+                            <button class="btn btn-sm btn-info" onclick="addOffer('<%= data[i]._id %>')">
+                                Add Offer
+                            </button>
+                        <% } %>
+                    </td>
+                    <td><%= data[i].quantity %></td>
+                    <td>
+                        <% if(data[i].isBlocked === false) { %>
+                        <button class="btn btn-danger">
+                            <a href="#" onclick="confirmBlockProduct(event, '<%= data[i]._id %>')" class="text-white">Block</a>
+                        </button>
+                        <% } else { %>
+                        <button class="btn btn-success">
+                            <a href="#" onclick="confirmUnblockProduct(event, '<%= data[i]._id %>')" class="text-white">Unblock</a>
+                        </button>
+                        <% } %>
+                        <a href="#" onclick="confirmDelete('<%= data[i]._id %>')" class="text-white"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                        </svg></a>
+                    </td>
+                    <td>
+                        <button class="btn btn-info">
+                            <a href="/admin/editProduct?id=<%= data[i]._id %>" class="text-white">Edit</a>
+                        </button>
+                    </td>
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <% for (let i = 1; i <= totalPages; i++) { %>
+            <li class="page-item <%= (i === currentPage) ? 'active' : '' %>">
+                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+            </li>
+            <% } %>
+        </ul>
+    </nav>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script>
+    async function addOffer(productId) {
+        const { value: percentage } = await Swal.fire({
+            title: "Add Offer",
+            input: "number",
+            inputLabel: "Offer Percentage",
+            inputPlaceholder: "Enter offer percentage",
+            inputAttributes: {
+                min: 1,
+                max: 99,
+                step: 1
+            },
+            showCancelButton: true,
+            confirmButtonColor: "#10b981",
+            cancelButtonColor: "#ef4444",
+            inputValidator: (value) => {
+                if (!value || value < 1 || value > 99) {
+                    return "Please enter a valid percentage between 1 and 99";
+                }
+            }
+        });
+
+        if (percentage) {
+            updateOffer(productId, percentage);
+        }
+    }
+
+    async function editOffer(productId, currentOffer) {
+        const { value: percentage } = await Swal.fire({
+            title: "Edit Offer",
+            input: "number",
+            inputLabel: "Offer Percentage",
+            inputPlaceholder: "Enter offer percentage",
+            inputValue: currentOffer,
+            inputAttributes: {
+                min: 1,
+                max: 99,
+                step: 1
+            },
+            showCancelButton: true,
+            confirmButtonColor: "#10b981",
+            cancelButtonColor: "#ef4444",
+            inputValidator: (value) => {
+                if (!value || value < 1 || value > 99) {
+                    return "Please enter a valid percentage between 1 and 99";
+                }
+            }
+        });
+
+        if (percentage) {
+            updateOffer(productId, percentage);
+        }
+    }
+
+    function updateOffer(productId, percentage) {
+        $.ajax({
+            url: "/admin/addProductOffer",
+            method: "post",
+            data: {
+                productId: productId,
+                percentage: percentage
+            },
+            success: (response) => {
+                if (response.status) {
+                    Swal.fire({
+                        title: 'Success',
+                        text: 'Offer updated successfully',
+                        icon: 'success',
+                        confirmButtonColor: '#10b981'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.message || 'Failed to update offer',
+                        icon: 'error',
+                        confirmButtonColor: '#ef4444'
+                    });
+                }
+            },
+            error: (error) => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'An unexpected error occurred',
+                    icon: 'error',
+                    confirmButtonColor: '#ef4444'
+                });
+            }
+        });
+    }
+
+    function removeOffer(productId) {
+        Swal.fire({
+            title: "Remove offer",
+            text: "Are you sure you want to remove this offer?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#3b82f6",
+            confirmButtonText: "Yes, remove it"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/admin/removeProductOffer",
+                    method: 'post',
+                    data: {
+                        productId: productId
+                    },
+                    success: (response) => {
+                        if (response.status) {
+                            Swal.fire({
+                                title: "Removed!",
+                                text: "The offer has been removed",
+                                icon: "success",
+                                confirmButtonColor: '#10b981'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message || 'Failed to remove offer',
+                                icon: 'error',
+                                confirmButtonColor: '#ef4444'
+                            });
+                        }
+                    },
+                    error: (error) => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An unexpected error occurred',
+                            icon: 'error',
+                            confirmButtonColor: '#ef4444'
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    function confirmBlockProduct(event, productId) {
+        event.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You are about to block this product!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#3b82f6",
+            confirmButtonText: "Yes, Block!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/admin/blockProduct?id=" + productId;
+            }
+        });
+    }
+
+    function confirmUnblockProduct(event, productId) {
+        event.preventDefault();
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You are about to unblock this product!",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#10b981",
+            cancelButtonColor: "#3b82f6",
+            confirmButtonText: "Yes, Unblock!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "/admin/unblockProduct?id=" + productId;
+            }
+        });
+    }
+
+    function confirmDelete(productId) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You will not be able to undo this action!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#3b82f6",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/admin/deleteProduct?id=${productId}`;
+            }
+        });
+    }
+</script>
+
+<%- include("../../views/partials/admin/footer") %>

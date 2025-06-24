@@ -1,0 +1,427 @@
+<%- include("../partials/user/header") %>
+
+<style>
+.container {
+    background-color: #ffffff;
+    display: flex;
+    width: 270px;
+    height: 120px;
+    position: relative;
+    border-radius: 6px;
+    transition: 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: scale(1.03);
+}
+
+.container:hover .left-side {
+    width: 110px;
+}
+
+.left-side {
+    background-color: #5de2a3;
+    width: 110px;
+    height: 120px;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.right-side {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    justify-content: space-between;
+    white-space: nowrap;
+    transition: 0.3s;
+}
+
+.right-side:hover {
+    background-color: #f9f7f9;
+}
+
+.new {
+    font-size: 23px;
+    font-family: "Lexend Deca", sans-serif;
+    margin-left: 20px;
+}
+
+.card {
+    width: 70px;
+    height: 46px;
+    background-color: #c7ffbc;
+    border-radius: 6px;
+    position: absolute;
+    display: flex;
+    z-index: 10;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 9px 9px 9px -2px rgba(77, 200, 143, 0.72);
+}
+
+.card-line {
+    width: 65px;
+    height: 13px;
+    background-color: #80ea69;
+    border-radius: 2px;
+    margin-top: 7px;
+}
+
+@media only screen and (max-width: 480px) {
+    .container {
+        transform: scale(0.7);
+    }
+
+    .container:hover {
+        transform: scale(0.74);
+    }
+
+    .new {
+        font-size: 18px;
+    }
+}
+
+.buttons {
+    width: 8px;
+    height: 8px;
+    background-color: #379e1f;
+    box-shadow: 0 -10px 0 0 #26850e, 0 10px 0 0 #56be3e;
+    border-radius: 50%;
+    margin-top: 5px;
+    transform: rotate(90deg);
+    margin: 10px 0 0 -30px;
+}
+
+.container:hover .card {
+    animation: slide-top 1.2s cubic-bezier(0.645, 0.045, 0.355, 1) both;
+}
+
+.container:hover .post {
+    animation: slide-post 1s cubic-bezier(0.165, 0.84, 0.44, 1) both;
+}
+
+@keyframes slide-top {
+    0% { transform: translateY(0); }
+    50%, 60% { transform: translateY(-70px) rotate(90deg); }
+    100% { transform: translateY(-8px) rotate(90deg); }
+}
+
+.post {
+    width: 63px;
+    height: 75px;
+    background-color: #dddde0;
+    position: absolute;
+    z-index: 11;
+    top: 120px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.post-line {
+    width: 47px;
+    height: 9px;
+    background-color: #545354;
+    position: absolute;
+    border-radius: 0 0 3px 3px;
+    right: 8px;
+    top: 8px;
+}
+
+.post-line:before {
+    content: "";
+    position: absolute;
+    width: 47px;
+    height: 9px;
+    background-color: #757375;
+    top: -8px;
+}
+
+.screen {
+    width: 47px;
+    height: 23px;
+    background-color: #ffffff;
+    position: absolute;
+    top: 22px;
+    right: 8px;
+    border-radius: 3px;
+}
+
+.numbers {
+    width: 12px;
+    height: 12px;
+    background-color: #838183;
+    box-shadow: 0 -18px 0 0 #838183, 0 18px 0 0 #838183;
+    border-radius: 2px;
+    position: absolute;
+    transform: rotate(90deg);
+    left: 25px;
+    top: 52px;
+}
+
+.numbers-line2 {
+    width: 12px;
+    height: 12px;
+    background-color: #aaa9ab;
+    box-shadow: 0 -18px 0 0 #aaa9ab, 0 18px 0 0 #aaa9ab;
+    border-radius: 2px;
+    position: absolute;
+    transform: rotate(90deg);
+    left: 25px;
+    top: 68px;
+}
+
+@keyframes slide-post {
+    50% { transform: translateY(0); }
+    100% { transform: translateY(-70px); }
+}
+
+.dollar {
+    position: absolute;
+    font-size: 16px;
+    font-family: "Lexend Deca", sans-serif;
+    width: 100%;
+    left: 0;
+    top: 0;
+    color: #4b953b;
+    text-align: center;
+}
+
+.container:hover .dollar {
+    animation: fade-in-fwd 0.3s 1s backwards;
+}
+
+@keyframes fade-in-fwd {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ps-product__preview img {
+    width: 50px;
+    height: auto;
+}
+</style>
+
+<main class="ps-main">
+    <div class="ps-content pt-80 pb-80">
+        <div class="ps-container">
+            <div class="ps-cart-listing">
+                <table class="table ps-cart__table">
+                    <thead>
+                        <tr>
+                            <th>All Products</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (cartItems && cartItems.length > 0) { %>
+                            <% cartItems.forEach(function(item) { %>
+                                <tr id="cartRow<%= item.product._id %>">
+                                    <td>
+                                        <a class="ps-product__preview" href="/productDetails?id=<%= item.product._id %>">
+                                            <img class="mr-15" src="<%= item.product.productImage[0] %>" alt=""> <%= item.product.productName %>
+                                        </a>
+                                    </td>
+                                    <td>₹<span id="price<%= item.product._id %>"><%= item.product.salePrice %></span></td>
+                                    <td>
+                                        <div class="form-group--number">
+                                            <button class="minus" onclick="changeQuantity('<%= item.product._id %>', 'decrease', <%= item.product.quantity %>)"><span>-</span></button>
+                                            <input class="form-control" type="text" id="cartProductQuantity<%= item.product._id %>" value="<%= item.quantity %>" readonly>
+                                            <button class="plus" onclick="changeQuantity('<%= item.product._id %>', 'increase', <%= item.product.quantity %>)"><span>+</span></button>
+                                        </div>
+                                    </td>
+                                    <td>₹<span id="subTotal<%= item.product._id %>"><%= item.totalPrice %></span></td>
+                                    <td>
+                                        <div class="ps-remove" onclick="confirmRemove('<%= item.product._id %>')"></div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    <p class="lead mb-4">No item found in Cart</p>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+
+                <div class="ps-cart__actions">
+                    <div class="ps-cart__promotion">
+                        <div class="form-group">
+                            <div class="ps-form--icon"><i class="fa fa-angle-right"></i>
+                                <input class="form-control" type="text" placeholder="Promo Code">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button class="ps-btn ps-btn--gray" onclick="window.location.href='/shop'">Continue Shopping</button>
+                            <!-- <button id="shareCartBtn">Share Cart</button> -->
+                        </div>
+                    </div>
+                    <div class="ps-cart__total">
+                        <h3>Total Price: <span id="grandTotal">₹ <%= grandTotal %></span></h3>
+                        <a href="/checkout">
+                            <div class="container">
+                                <div class="left-side">
+                                    <div class="card">
+                                        <div class="card-line"></div>
+                                        <div class="buttons"></div>
+                                    </div>
+                                    <div class="post">
+                                        <div class="post-line"></div>
+                                        <div class="screen">
+                                            <div class="dollar">$</div>
+                                        </div>
+                                        <div class="numbers"></div>
+                                        <div class="numbers-line2"></div>
+                                    </div>
+                                </div>
+                                <div class="right-side">
+                                    <div class="new">Checkout</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function changeQuantity(productId, action, maxStock) {
+            const quantityElement = document.getElementById(`cartProductQuantity${productId}`);
+            let currentQuantity = parseInt(quantityElement.value);
+
+            if (action === 'increase') {
+                if (currentQuantity >= 5) {
+                    Swal.fire('Error', 'Maximum 5 quantity per user', 'error');
+                    return;
+                }
+                if (currentQuantity >= maxStock) {
+                    Swal.fire('Error', 'Stock limit exceeded', 'error');
+                    return;
+                }
+            } else if (action === 'decrease') {
+                if (currentQuantity <= 1) {
+                    confirmRemove(productId);
+                    return;
+                }
+            }
+
+            $.ajax({
+                url: '/changeQuantity',
+                method: 'POST',
+                data: { productId: productId, action: action },
+                success: (response) => {
+                    if (response.status) {
+                        if (response.quantity === 0) {
+                            // Remove the row if quantity is 0
+                            $(`#cartRow${productId}`).remove();
+                            // Check if cart is empty
+                            if ($('.ps-cart__table tbody tr').length === 0) {
+                                $('.ps-cart__table tbody').html('<tr><td colspan="5" class="text-center"><p class="lead mb-4">No item found in Cart</p></td></tr>');
+                            }
+                        } else {
+                            // Update quantity
+                            $(`#cartProductQuantity${productId}`).val(response.quantity);
+                            // Update subtotal
+                            const subTotal = response.quantity * response.productPrice;
+                            $(`#subTotal${productId}`).text(subTotal.toFixed(2));
+                            // Update grand total
+                            $('#grandTotal').text(`₹ ${response.grandTotal.toFixed(2)}`);
+                        }
+                        Swal.fire('Success', response.message, 'success');
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                },
+                error: (error) => {
+                    console.error("AJAX Error:", error);
+                    Swal.fire('Error', 'An error occurred while updating the cart', 'error');
+                }
+            });
+        }
+
+        function confirmRemove(productId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/deleteItem?id=${productId}`,
+                        method: 'GET',
+                        success: (response) => {
+                            if (response.status) {
+                                // Remove the row
+                                $(`#cartRow${productId}`).remove();
+                                // Update grand total (fetch from server or recalculate if available)
+                                $.ajax({
+                                    url: '/getCartTotal',
+                                    method: 'GET',
+                                    success: (totalResponse) => {
+                                        if (totalResponse.status) {
+                                            $('#grandTotal').text(`₹ ${totalResponse.grandTotal.toFixed(2)}`);
+                                        }
+                                    }
+                                });
+                                // Check if cart is empty
+                                if ($('.ps-cart__table tbody tr').length === 0) {
+                                    $('.ps-cart__table tbody').html('<tr><td colspan="5" class="text-center"><p class="lead mb-4">No item found in Cart</p></td></tr>');
+                                }
+                                Swal.fire('Removed!', response.message, 'success');
+                            } else {
+                                Swal.fire('Error', response.message, 'error');
+                            }
+                        },
+                        error: (error) => {
+                            console.error("AJAX Error:", error);
+                            Swal.fire('Error', 'There was an error removing the item from the cart', 'error');
+                        }
+                    });
+                }
+            });
+        }
+
+        document.getElementById('shareCartBtn')?.addEventListener('click', async () => {
+            try {
+                const response = await fetch('/shareCart', { method: 'POST' });
+                const data = await response.json();
+                if (data.status) {
+                    await navigator.clipboard.writeText(data.shareUrl);
+                    Swal.fire('Success', 'Shareable cart link copied to clipboard!', 'success');
+                } else {
+                    Swal.fire('Error', data.message, 'error');
+                }
+            } catch (err) {
+                Swal.fire('Error', 'Failed to share cart', 'error');
+                console.error(err);
+            }
+        });
+    </script>
+</main>
+
+<%- include("../partials/user/footer") %>

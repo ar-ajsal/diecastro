@@ -1,0 +1,505 @@
+<%- include('../partials/admin/header') %>
+
+<style>
+    :root {
+        --primary-color: #4f46e5; /* Indigo */
+        --success-color: #10b981; /* Green */
+        --danger-color: #ef4444; /* Red */
+        --info-color: #3b82f6; /* Blue */
+        --warning-color: #f59e0b; /* Amber */
+        --light-gray: #e5e7eb; /* Soft gray */
+        --background-color: #f3f4f6; /* Light neutral */
+        --white: #ffffff; /* Clean white */
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        --transition: all 0.2s ease; /* Smooth transitions */
+        --accent-color: #a5b4fc; /* Light indigo */
+    }
+
+    body {
+        background-color: var(--background-color);
+        font-family: 'Inter', sans-serif;
+        color: #6b7280;
+        min-height: 100vh;
+    }
+
+    .container-fluid {
+        margin-left: 30px; /* Match sidebar width */
+        padding: 2rem;
+    }
+
+    h1.mt-4 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+    }
+
+    .search-form {
+        max-width: 500px;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 8px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid var(--light-gray);
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        background-color: var(--white);
+        color: #6b7280;
+        transition: var(--transition);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .card {
+        background: var(--white);
+        border: none;
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-bottom: 1.5rem;
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+    }
+
+    .card-header {
+        background: var(--primary-color);
+        color: var(--white);
+        border-radius: 12px 12px 0 0;
+        padding: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+
+    .card-header i {
+        margin-right: 0.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--white);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .order-table th,
+    .order-table td {
+        vertical-align: middle;
+        color: #6b7280;
+        border: 1px solid var(--light-gray);
+        padding: 12px;
+        transition: var(--transition);
+    }
+
+    .order-table th {
+        background: var(--primary-color);
+        color: var(--white);
+        font-weight: 600;
+    }
+
+    .table-hover tbody tr:hover {
+        background: rgba(165, 180, 252, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-weight: 500;
+        color: var(--white);
+        display: inline-block;
+    }
+
+    .bg-success {
+        background: var(--success-color);
+    }
+
+    .bg-danger {
+        background: var(--danger-color);
+    }
+
+    .bg-info {
+        background: var(--info-color);
+    }
+
+    .bg-warning {
+        background: var(--warning-color);
+    }
+
+    .btn {
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        transition: var(--transition);
+        color: var(--white);
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow);
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background: var(--accent-color);
+    }
+
+    .btn-secondary {
+        background: #6b7280;
+        border-color: #6b7280;
+    }
+
+    .btn-secondary:hover {
+        background: #4b5563;
+    }
+
+    .btn-info {
+        background: var(--info-color);
+        border-color: var(--info-color);
+    }
+
+    .btn-info:hover {
+        background: #2563eb;
+    }
+
+    .btn-danger {
+        background: var(--danger-color);
+        border-color: var(--danger-color);
+    }
+
+    .btn-danger:hover {
+        background: #dc2626;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .order-actions .btn {
+        margin: 0 2px;
+    }
+
+    .pagination {
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+
+    .page-item {
+        margin: 0 2px;
+    }
+
+    .page-link {
+        color: #6b7280;
+        background: var(--white);
+        border: 1px solid var(--light-gray);
+        border-radius: 8px;
+        padding: 8px 16px;
+        transition: var(--transition);
+    }
+
+    .page-item.active .page-link {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        color: var(--white);
+    }
+
+    .page-link:hover {
+        background: var(--accent-color);
+        color: var(--white);
+        border-color: var(--accent-color);
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .d-flex.align-items-center img {
+        border: 1px solid var(--light-gray);
+        border-radius: 4px;
+        transition: var(--transition);
+    }
+
+    .d-flex.align-items-center img:hover {
+        transform: scale(1.05);
+    }
+
+    @media screen and (max-width: 768px) {
+        .container-fluid {
+            margin-left: 0;
+            padding: 1rem;
+        }
+
+        .search-form {
+            max-width: 100%;
+        }
+
+        .input-group {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .order-table th,
+        .order-table td {
+            min-width: 100px;
+        }
+    }
+</style>
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Order Management</h1>
+
+    <!-- Search Form -->
+    <form class="search-form" action="/admin/orders" method="GET">
+        <div class="input-group">
+            <input type="text" class="form-control" name="search" placeholder="Search by Order ID, Customer, or Product" 
+                   value="<%= search || '' %>">
+            <input type="hidden" name="limit" value="<%= limit %>">
+            <button class="btn btn-primary" type="submit">Search</button>
+            <% if (search) { %>
+                <a href="/admin/orders?limit=<%= limit %>" class="btn btn-secondary">Clear</a>
+            <% } %>
+        </div>
+    </form>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            All Orders
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped order-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (orders.length === 0) { %>
+                            <tr>
+                                <td colspan="7" class="text-center">No orders found</td>
+                            </tr>
+                        <% } else { %>
+                            <% orders.forEach(order => { %>
+                                <tr>
+                                    <td>#<%= order.orderId %></td>
+                                    <td><%= new Date(order.createdOn).toLocaleDateString() %></td>
+                                    <td><%= order.address.name %></td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <% if (order.orderedItems[0] && order.orderedItems[0].product && order.orderedItems[0].product.productImage && order.orderedItems[0].product.productImage.length > 0) { %>
+                                                <img src="/<%= order.orderedItems[0].product.productImage[0] %>" 
+                                                     alt="Product" 
+                                                     style="width: 50px; height: 50px; object-fit: cover;"
+                                                     class="me-2">
+                                            <% } else { %>
+                                                <img src="/images/placeholder.jpg" 
+                                                     alt="No Image" 
+                                                     style="width: 50px; height: 50px; object-fit: cover;"
+                                                     class="me-2">
+                                            <% } %>
+                                            <span>
+                                                <%= order.orderedItems[0] && order.orderedItems[0].product && order.orderedItems[0].product.productName ? order.orderedItems[0].product.productName : 'Product Unavailable' %>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td>₹<%= order.finalAmount %></td>
+                                    <td>
+                                        <span class="status-badge <%= 
+                                            order.status === 'delivered' ? 'bg-success' :
+                                            order.status === 'cancelled' ? 'bg-danger' :
+                                            order.status === 'shipped' ? 'bg-info' :
+                                            'bg-warning'
+                                        %>">
+                                            <%= order.status.toUpperCase() %>
+                                        </span>
+                                    </td>
+                                    <td class="order-actions">
+                                        <a href="/admin/orders/<%= order._id %>" 
+                                           class="btn btn-primary btn-sm">
+                                            View Details
+                                        </a>
+                                        <% if (order.status !== 'returned' && order.status !== 'return_denied' && order.status !== 'cancelled' && order.status !== 'delivered' && order.status !== 'return_requested') { %>
+                                            <button onclick="updateStatus('<%= order._id %>')" 
+                                                    class="btn btn-info btn-sm">
+                                                Update Status
+                                            </button>
+                                            <button onclick="cancelOrder('<%= order._id %>')" 
+                                                    class="btn btn-danger btn-sm">
+                                                Cancel
+                                            </button>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Controls -->
+            <% if (totalPages > 1) { %>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= currentPage - 1 %>&limit=<%= limit %>&search=<%= encodeURIComponent(search) %>">Previous</a>
+                        </li>
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>&limit=<%= limit %>&search=<%= encodeURIComponent(search) %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= currentPage + 1 %>&limit=<%= limit %>&search=<%= encodeURIComponent(search) %>">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script>
+    async function updateStatus(orderId) {
+        const { value: status } = await Swal.fire({
+            title: 'Update Order Status',
+            input: 'select',
+            inputOptions: {
+                'pending': 'Pending',
+                'confirmed': 'Confirmed',
+                'shipped': 'Shipped',
+                'delivered': 'Delivered'
+            },
+            inputPlaceholder: 'Select status',
+            showCancelButton: true,
+            confirmButtonColor: '#10b981',
+            cancelButtonColor: '#3b82f6',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'You need to select a status!';
+                }
+            }
+        });
+
+        if (status) {
+            try {
+                const response = await fetch('/admin/orders/update-status', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ orderId, status }),
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Order status updated successfully',
+                        timer: 1500,
+                        confirmButtonColor: '#10b981'
+                    });
+                    location.reload();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Failed to update status',
+                    confirmButtonColor: '#ef4444'
+                });
+            }
+        }
+    }
+
+    async function cancelOrder(orderId) {
+        const result = await Swal.fire({
+            title: 'Cancel Order',
+            text: 'Are you sure you want to cancel this order?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#3b82f6',
+            confirmButtonText: 'Yes, cancel it!'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch('/admin/orders/cancel', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ orderId }),
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Order cancelled successfully',
+                        timer: 1500,
+                        confirmButtonColor: '#10b981'
+                    });
+                    location.reload();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'Failed to cancel order',
+                    confirmButtonColor: '#ef4444'
+                });
+            }
+        }
+    }
+</script>
+
+<%- include('../partials/admin/footer') %>

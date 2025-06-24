@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    .invoice-box { border: 1px solid #eee; padding: 30px; width: 600px; margin: auto; }
+    h2 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; }
+    table td, th { border: 1px solid #ddd; padding: 8px; }
+    .total { text-align: right; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="invoice-box">
+    <h2>Invoice</h2>
+    <p><strong>Date:</strong> <%= invoiceDate ? invoiceDate.toDateString() : new Date().toDateString() %></p>
+    <p><strong>Invoice #:</strong> <%= orderId %></p>
+
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Qty</th><th>Price</th></tr>
+      </thead>
+      <tbody>
+        <% orderedItems.forEach(item => { %>
+          <tr>
+            <td><%= item.product.name %></td> <!-- Assuming populated -->
+            <td><%= item.quantity %></td>
+            <td>$<%= item.price.toFixed(2) %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <p><strong>Total Price:</strong> $<%= totalPrice.toFixed(2) %></p>
+    <p><strong>Discount:</strong> $<%= discount.toFixed(2) %></p>
+    <p class="total">Final Amount: $<%= finalAmount.toFixed(2) %></p>
+
+    <h3>Shipping Address</h3>
+    <p>
+      <%= address.name %><br>
+      <%= address.street %><br>
+      <%= address.city %>, <%= address.state %> - <%= address.zip %><br>
+      <%= address.country %>
+    </p>
+  </div>
+</body>
+</html>

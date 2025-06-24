@@ -1,0 +1,446 @@
+<%- include("../../views/partials/admin/header") %>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+
+<style>
+    :root {
+        --primary-color: #4f46e5; /* Indigo */
+        /* --secondary-color: #6b7280; Neutral gray */
+        --success-color: #10b981; /* Green */
+        --danger-color: #ef4444; /* Red */
+        --info-color: #3b82f6; /* Blue */
+        --warning-color: #f59e0b; /* Amber */
+        --light-gray: #e5e7eb; /* Soft gray */
+        --background-color: #f3f4f6; /* Light neutral */
+        --white: #ffffff; /* Clean white */
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        --transition: all 0.2s ease; /* Smooth transitions */
+        --accent-color: #a5b4fc; /* Light indigo */
+    }
+
+    body {
+        background-color: var(--background-color);
+        font-family: 'Inter', sans-serif;
+        color: var(--secondary-color);
+    }
+
+    .content-main {
+        padding: 2rem;
+        min-height: 100vh;
+        margin-left: 250px; /* Match sidebar width from category.ejs */
+    }
+
+    .content-header {
+        margin-bottom: 1.5rem;
+        background-color: var(--white);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+    }
+
+    .content-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--secondary-color);
+        text-align: left;
+    }
+
+    .form-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        background-color: var(--white);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+
+    .form-container:hover {
+        transform: translateY(-3px);
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+        font-weight: 500;
+        font-size: 0.95rem;
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 0.95rem;
+        border-radius: 8px;
+        border: 1px solid var(--light-gray);
+        background-color: var(--white);
+        color: var(--secondary-color);
+        transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .form-group input[type="number"] {
+        --moz-appearance: textfield;
+    }
+
+    .form-group select {
+        cursor: pointer;
+    }
+
+    .error-message {
+        color: var(--danger-color);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-start;
+        margin-top: 1.5rem;
+    }
+
+    .form-actions button {
+        background: var(--primary-color);
+        color: var(--white);
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .form-actions button:hover {
+        background: var(--accent-color);
+        transform: translateY(-1px);
+    }
+
+    .form-actions button:active {
+        transform: translateY(1px);
+        box-shadow: none;
+    }
+
+    .image-upload-container {
+        background-color: var(--white);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: var(--shadow);
+        margin-top: 1.5rem;
+    }
+
+    .image-upload-container h4 {
+        color: var(--secondary-color);
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        max-height: 200px;
+        border: 1px solid var(--light-gray);
+        margin-top: 10px;
+        border-radius: 8px;
+        transition: var(--transition);
+    }
+
+    .image-preview:hover {
+        transform: scale(1.02);
+    }
+
+    .thumbnail {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .thumbnail img {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+        margin-right: 10px;
+        border: 1px solid var(--light-gray);
+        transition: var(--transition);
+    }
+
+    .thumbnail img:hover {
+        transform: scale(1.1);
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        color: var(--white);
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+        background: var(--accent-color);
+        transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: none;
+    }
+
+    @media screen and (max-width: 768px) {
+        .form-container {
+            grid-template-columns: 1fr;
+        }
+
+        .content-main {
+            margin-left: 0;
+            padding: 1rem;
+        }
+    }
+</style>
+
+<section class="content-main">
+    <div class="content-header">
+        <h2 class="content-title">Add New Product</h2>
+    </div>
+    <form id="productForm" method="POST" action="/admin/addProducts" enctype="multipart/form-data">
+        <div class="form-container">
+            <!-- Product Fields -->
+            <div class="form-group">
+                <label for="product_name">Product Name</label>
+                <input type="text" name="productName" id="product_name" placeholder="Enter product name">
+                <div id="productName-error" class="error-message"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="descriptionid">Short Description</label>
+                <textarea id="descriptionid" name="description" rows="4" placeholder="Enter product short description" required></textarea>
+                <div id="description-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <input type="text" name="brand" id="brand" placeholder="Enter brand">
+                <div id="brand-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="regularPrice">Regular Price</label>
+                <input type="number" name="regularPrice" id="regularPrice" step="0.01" placeholder="Enter regular price">
+                <div id="regularPrice-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="salePrice">Sale Price</label>
+                <input type="number" name="salePrice" id="salePrice" step="0.01" placeholder="Enter sale price">
+                <div id="salePrice-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" name="quantity" id="quantity" placeholder="Enter quantity">
+                <div id="quantity-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="color">Color</label>
+                <input type="text" name="color" id="color" placeholder="Enter color">
+                <div id="color-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="scale">Scale</label>
+                <input type="text" name="scale" id="scale" placeholder="Enter scale">
+                <div id="scale-error" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select name="category" id="category">
+                    <% for (let i = 0; i < cat.length; i++) { %>
+                        <option value="<%= cat[i].name %>"><%= cat[i].name %></option>
+                    <% } %>
+                </select>
+                <div id="category-error" class="error-message"></div>
+            </div>
+        </div>
+
+        <!-- Image Uploads -->
+        <div class="image-upload-container">
+            <h4>Product Images</h4>
+            <% for (let i = 1; i <= 4; i++) { %>
+                <div class="form-group">
+                    <label for="image<%= i %>">Image <%= i %></label>
+                    <input type="file" name="image<%= i %>" id="image<%= i %>" class="form-control" accept="image/*" onchange="previewImage(event, <%= i %>)">
+                    <img id="preview<%= i %>" src="#" alt="Image preview" class="image-preview" style="display: none;">
+                    <button type="button" class="btn btn-primary mt-2" onclick="saveImage(<%= i %>)">Save Image <%= i %></button>
+                    <div id="image<%= i %>-error" class="error-message"></div>
+                </div>
+            <% } %>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit">Publish Product</button>
+        </div>
+    </form>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+<script>
+    let croppers = {};
+
+    function previewImage(event, index) {
+        const input = event.target;
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(`preview${index}`);
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+
+                if (croppers[index]) {
+                    croppers[index].destroy();
+                }
+
+                croppers[index] = new Cropper(preview, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    ready: function() {
+                        this.cropper.crop();
+                    }
+                });
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function saveImage(index) {
+        if (croppers[index]) {
+            croppers[index].getCroppedCanvas().toBlob((blob) => {
+                const formData = new FormData();
+                formData.append('image', blob, `product-${Date.now()}-${index}.webp`);
+                
+                fetch('/admin/saveImage', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: `Image ${index} saved successfully`,
+                            icon: 'success',
+                            confirmButtonColor: '#10b981'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: data.message || `Failed to save Image ${index}`,
+                            icon: 'error',
+                            confirmButtonColor: '#ef4444'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An unexpected error occurred',
+                        icon: 'error',
+                        confirmButtonColor: '#ef4444'
+                    });
+                });
+            }, 'image/webp');
+        }
+    }
+
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        let isValid = true;
+        const requiredFields = ['productName', 'description', 'brand', 'regularPrice', 'salePrice', 'quantity', 'color', 'category', 'scale'];
+        
+        requiredFields.forEach(field => {
+            const input = document.getElementsByName(field)[0];
+            const errorDiv = document.getElementById(`${field}-error`);
+            if (!input || !input.value.trim()) {
+                isValid = false;
+                if (errorDiv) errorDiv.textContent = 'This field is required.';
+            } else {
+                if (errorDiv) errorDiv.textContent = '';
+            }
+        });
+
+        if (isValid) {
+            const formData = new FormData(this);
+            // Append cropped images to formData
+            const promises = [];
+            for (let i = 1; i <= 4; i++) {
+                if (croppers[i]) {
+                    promises.push(new Promise((resolve) => {
+                        croppers[i].getCroppedCanvas().toBlob((blob) => {
+                            formData.set(`image${i}`, blob, `product-${Date.now()}-${i}.webp`);
+                            resolve();
+                        }, 'image/webp');
+                    }));
+                }
+            }
+
+            Promise.all(promises).then(() => {
+                fetch('/admin/addProducts', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Product added successfully',
+                            icon: 'success',
+                            confirmButtonColor: '#10b981'
+                        }).then(() => window.location.href = '/admin/addProducts');
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: data.message || 'An error occurred while adding the product',
+                            icon: 'error',
+                            confirmButtonColor: '#ef4444'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An unexpected error occurred',
+                        icon: 'error',
+                        confirmButtonColor: '#ef4444'
+                    });
+                });
+            });
+        }
+    });
+</script>
+
+<%- include("../../views/partials/admin/footer") %>
