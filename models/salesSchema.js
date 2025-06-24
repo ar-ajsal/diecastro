@@ -1,27 +1,20 @@
+// === salesSchema.js ===
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const saleSchema = new mongoose.Schema({
+const salesSchema = new Schema({
   orderId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Order',
     required: true
   },
-  amount: {
-    type: Number,
-    required: true
-  },
-  discount: {
-    type: Number,
-    default: 0
-  },
-  coupon: {
-    type: Number,
-    default: 0
-  },
+  totalPrice: Number,
+  discount: Number,
+  finalAmount: Number,
   date: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model('Sale', saleSchema);
+module.exports = mongoose.model('Sales', salesSchema);
