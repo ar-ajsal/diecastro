@@ -16,6 +16,9 @@ const { Blog } = require('./models/blogSchema');
 // Connect to MongoDB
 connectDB();
 
+const compression = require('compression');
+app.use(compression());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,7 +28,7 @@ app.use(
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
-    
+
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
     cookie: { secure: false, httpOnly: true, maxAge: 24 * 60 * 60 * 1000 },
   })
@@ -38,12 +41,6 @@ app.use(passport.session());
 // Set user for views
 app.use((req, res, next) => {
   res.locals.user = req.user;
-  next();
-});
-
-// Disable cache
-app.use((req, res, next) => {
-  res.set('Cache-Control', 'no-store');
   next();
 });
 
@@ -64,15 +61,21 @@ app.set('view engine', 'ejs');
 app.set('views', [path.join(__dirname, 'views/user'), path.join(__dirname, 'views/admin')]);
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Disable cache for dynamic routes
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
+
 // Routes
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
 
-const PORT = process.env.PORT ;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
 
 module.exports = app;

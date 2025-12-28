@@ -1,42 +1,4 @@
 <%- include("../partials/user/header") %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link href="apple-touch-icon.png" rel="apple-touch-icon">
-    <link href="favicon.png" rel="icon">
-    <title>DieCastro | Miniature Die-Cast Cars for Collectors & Enthusiasts</title>
-    <meta name="description" content="Discover top-quality miniature die-cast cars at DieCastro. Perfect for collectors and hobbyists. Free shipping on select models!">
-    <meta name="keywords" content="miniature cars, diecast cars, 1:24 cars,1:18 cars ,toy cars, collector models, vintage cars">
-    <meta name="author" content="DieCastro Team">
-
-    <!-- Fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:300,400,700%7CMontserrat:300,400,500,600,700,800,900" rel="stylesheet">
-    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="plugins/ps-icon/style.css">
-    <!-- CSS Library-->
-    <link rel="stylesheet" href="plugins/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="plugins/owl-carousel/assets/owl.carousel.css">
-    <link rel="stylesheet" href="plugins/jquery-bar-rating/dist/themes/fontawesome-stars.css">
-    <link rel="stylesheet" href="plugins/slick/slick/slick.css">
-    <link rel="stylesheet" href="plugins/bootstrap-select/dist/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="plugins/Magnific-Popup/dist/magnific-popup.css">
-    <link rel="stylesheet" href="plugins/jquery-ui/jquery-ui.min.css">
-    <link rel="stylesheet" href="plugins/revolution/css/settings.css">
-    <link rel="stylesheet" href="plugins/revolution/css/layers.css">
-    <link rel="stylesheet" href="plugins/revolution/css/navigation.css">
-    <!-- Custom-->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <!-- Wishlist Dependencies -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
@@ -535,8 +497,8 @@
             transition: transform 0.3s ease;
         }
     </style>
-</head>
-<body class="ps-loading">
+
+
     <main class="ps-main">
         <div class="ps-section--features-product ps-section masonry-root pt-100 pb-100">
             <div class="ps-container">
@@ -546,14 +508,19 @@
                 <div class="ps-section__content pb-50">
                     <div class="carousel">
                         <div class="list">
-                            <% products.forEach(product => { %>
+                            <% products.forEach(product=> { %>
                                 <div class="item">
-                                    <img src="<%= product.productImage[0] %>" data-detail="/productDetails?id=<%= product._id %>" alt="<%= product.productName %>">
+                                    <img src="<%= product.productImage[0] %>"
+                                        data-detail="/productDetails?id=<%= product._id %>"
+                                        alt="<%= product.productName %>">
                                     <div class="introduce">
                                         <div class="title">
-                                            <%= product.isNew ? 'NEW ARRIVAL' : (product.salePrice < product.regularPrice ? 'SALE' : '') %>
+                                            <%= product.isNew ? 'NEW ARRIVAL' : (product.salePrice <
+                                                product.regularPrice ? 'SALE' : '' ) %>
                                         </div>
-                                        <div class="topic"><%= product.productName %></div>
+                                        <div class="topic">
+                                            <%= product.productName %>
+                                        </div>
                                         <div class="des">
                                             <%= product.categories ? product.categories.join(', ') : product.description %>
                                         </div>
@@ -562,22 +529,25 @@
                                     <div class="detail">
                                         <div class="title"><%= product.productName %></div>
                                         <div class="des">
-                                            <%= product.categories ? 'H' + product.categories[0] : product.description %>.
+                                            <%= product.categories ? ' H' + product.categories[0] : product.description
+                                                %>.
                                         </div>
                                         <div class="categories">
-                                            <% (product.categories || []).forEach(category => { %>
-                                                <a href="/filter?category=<%= category %>"><%= category %></a>,
-                                            <% }) %>
+                                            <% (product.categories || []).forEach(category=> { %>
+                                                <a href="/filter?category=<%= category %>">
+                                                    <%= category %>
+                                                </a>,
+                                                <% }) %>
                                         </div>
                                         <div class="price">
                                             <% if (product.salePrice < product.regularPrice) { %>
                                                 <del>₹<%= product.regularPrice.toLocaleString('en-IN') %></del>
-                                            <% } %>
-                                            ₹<%= product.salePrice.toLocaleString('en-IN') %>
+                                                <% } %>
+                                                    ₹<%= product.salePrice.toLocaleString('en-IN') %>
                                         </div>
                                     </div>
                                 </div>
-                            <% }) %>
+                                <% }) %>
                         </div>
                         <div class="arrows">
                             <button id="prev"><i class="fa-solid fa-backward"></i></button>
@@ -590,8 +560,12 @@
         </div>
 
         <div class="ps-section--offer">
-            <div class="ps-column"><a class="ps-offer" href="/shop"><img src="https://www.amalgamcollection.com/cdn/shop/files/PorscheSpyder-JamesDeanFigure-PROMO-Front3.4AWIDEEDIT_2000x850_crop_center.jpg?v=1743093047" alt=""></a></div>
-            <div class="ps-column"><a class="ps-offer" href="/shop"><img src="https://www.amalgamcollection.com/cdn/shop/files/Heroimagewideedit_0cb9aaa6-2223-46fd-89b5-eb2ccd85cbe9_2000x850_crop_center.jpg?v=1744821507" alt=""></a></div>
+            <div class="ps-column"><a class="ps-offer" href="/shop"><img
+                        src="https://www.amalgamcollection.com/cdn/shop/files/PorscheSpyder-JamesDeanFigure-PROMO-Front3.4AWIDEEDIT_2000x850_crop_center.jpg?v=1743093047"
+                        alt=""></a></div>
+            <div class="ps-column"><a class="ps-offer" href="/shop"><img
+                        src="https://www.amalgamcollection.com/cdn/shop/files/Heroimagewideedit_0cb9aaa6-2223-46fd-89b5-eb2ccd85cbe9_2000x850_crop_center.jpg?v=1744821507"
+                        alt=""></a></div>
         </div>
 
         <div class="ps-section--sale-off ps-section pt-80 pb-40">
@@ -601,7 +575,7 @@
                 </div>
                 <div class="ps-section__content">
                     <div class="row" id="hot-deal-container">
-                        <% if (products && products.length > 0) { %>
+                        <% if (products && products.length> 0) { %>
                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                 <div class="ps-hot-deal" id="hot-deal">
                                     <div class="ps-product ps-product--hot-deal">
@@ -616,13 +590,20 @@
                                             <p class="ps-product__price" id="hot-deal-price"></p>
                                             <p class="ps-product__category" id="hot-deal-categories"></p>
                                             <ul class="ps-countdown" data-time="December 31, 2025 23:59:59">
-                                                <li><span class="hour"></span><p>Hours</p></li>
+                                                <li><span class="hour"></span>
+                                                    <p>Hours</p>
+                                                </li>
                                                 <li class="divider">:</li>
-                                                <li><span class="minutes"></span><p>minutes</p></li>
+                                                <li><span class="minutes"></span>
+                                                    <p>minutes</p>
+                                                </li>
                                                 <li class="divider">:</li>
-                                                <li><span class="seconds"></span><p>Seconds</p></li>
+                                                <li><span class="seconds"></span>
+                                                    <p>Seconds</p>
+                                                </li>
                                             </ul>
-                                            <a class="ps-btn" id="hot-deal-order" href="">Order Today<i class="ps-icon-next"></i></a>
+                                            <a class="ps-btn" id="hot-deal-order" href="">Order Today<i
+                                                    class="ps-icon-next"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -638,26 +619,29 @@
                                     <a class="point second" href="javascript:;"><i class="fa fa-plus"></i>
                                         <div class="ps-hotspot__content">
                                             <p class="heading">Feature 2</p>
-                                            <p>Lightweight cushioning offers comfort and performance with every step.</p>
+                                            <p>Lightweight cushioning offers comfort and performance with every
+                                                step.</p>
                                         </div>
                                     </a>
                                     <a class="point third" href="javascript:;"><i class="fa fa-plus"></i>
                                         <div class="ps-hotspot__content">
                                             <p class="heading">Feature 3</p>
-                                            <p>Engineered upper materials increase durability and airflow for optimal performance.</p>
+                                            <p>Engineered upper materials increase durability and airflow for
+                                                optimal performance.</p>
                                         </div>
                                     </a>
                                     <img id="hot-deal-secondary-image" src="" alt="">
                                 </div>
                             </div>
-                        <% } else { %>
-                            <div class="col-12 text-center">
-                                <p>No hot deals available right now!</p>
-                            </div>
-                        <% } %>
-                        <h1 style=" display: flex; align-items: center; font-family: 'Inter', sans-serif; font-size: 4.5rem; font-weight: 900; color: #000000; text-align: center; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(135deg, #000000, #000000); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); margin: 2rem 0; padding: 1rem; line-height: 1.2;">
-   "Rev Up Your Collection with Our Stunning Miniature Cars Today!"
-</h1>
+                            <% } else { %>
+                                <div class="col-12 text-center">
+                                    <p>No hot deals available right now!</p>
+                                </div>
+                                <% } %>
+                                    <h1
+                                        style=" display: flex; align-items: center; font-family: 'Inter', sans-serif; font-size: 4.5rem; font-weight: 900; color: #000000; text-align: center; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(135deg, #000000, #000000); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); margin: 2rem 0; padding: 1rem; line-height: 1.2;">
+                                        "Rev Up Your Collection with Our Stunning Miniature Cars Today!"
+                                    </h1>
                     </div>
                 </div>
             </div>
@@ -683,26 +667,33 @@
                         data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false"
                         data-owl-item="4" data-owl-item-xs="1" data-owl-item-sm="2" data-owl-item-md="3"
                         data-owl-item-lg="4" data-owl-duration="1000" data-owl-mousedrag="on">
-                        <% products.forEach(product => { %>
+                        <% products.forEach(product=> { %>
                             <div class="ps-shoes--carousel">
                                 <div class="ps-shoe">
                                     <div class="ps-shoe__thumbnail">
                                         <% if (product.isNew) { %>
                                             <div class="ps-badge"><span>New</span></div>
-                                        <% } %>
-                                        <% if (product.salePrice < product.regularPrice) { %>
-                                            <div class="ps-badge ps-badge--sale ps-badge--2nd"><span>-<%= Math.round(((product.regularPrice - product.salePrice) / product.regularPrice) * 100) %>%</span></div>
-                                        <% } %>
-                                        <a class="ps-shoe__favorite" href="#" onclick="addToWishlist('<%= product._id %>')"><i class="ps-icon-heart"></i></a>
-                                        <img src="<%= product.productImage[0] %>" alt="<%= product.productName %>">
-                                        <a class="ps-shoe__overlay" href="/productDetails?id=<%= product._id %>"></a>
+                                            <% } %>
+                                                <% if (product.salePrice < product.regularPrice) { %>
+                                                    <div class="ps-badge ps-badge--sale ps-badge--2nd"><span>-<%=
+                                                                Math.round(((product.regularPrice - product.salePrice) /
+                                                                product.regularPrice) * 100) %>
+                                                                %</span></div>
+                                                    <% } %>
+                                                        <a class="ps-shoe__favorite" href="#"
+                                                            onclick="addToWishlist('<%= product._id %>')"><i
+                                                                class="ps-icon-heart"></i></a>
+                                                        <img src="<%= product.productImage[0] %>"
+                                                            alt="<%= product.productName %>">
+                                                        <a class="ps-shoe__overlay"
+                                                            href="/productDetails?id=<%= product._id %>"></a>
                                     </div>
                                     <div class="ps-shoe__content">
                                         <div class="ps-shoe__variants">
                                             <div class="ps-shoe__variant normal">
-                                                <% for (let j = 0; j < Math.min(product.productImage.length, 4); j++) { %>
+                                                <% for (let j=0; j < Math.min(product.productImage.length, 4); j++) { %>
                                                     <img src="<%= product.productImage[j] %>" alt="">
-                                                <% } %>
+                                                    <% } %>
                                             </div>
                                             <select class="ps-rating ps-shoe__rating">
                                                 <option value="1">1</option>
@@ -713,23 +704,28 @@
                                             </select>
                                         </div>
                                         <div class="ps-shoe__detail">
-                                            <a class="ps-shoe__name" href="/productDetails?id=<%= product._id %>"><%= product.productName %></a>
+                                            <a class="ps-shoe__name" href="/productDetails?id=<%= product._id %>">
+                                                <%= product.productName %>
+                                            </a>
                                             <p class="ps-shoe__categories">
-                                                <% (product.categories || ['miniature cars']).forEach(category => { %>
-                                                    <a href="/filter?category=<%= category %>"><%= category %></a>,
-                                                <% }) %>
+                                                <% (product.categories || ['miniature cars']).forEach(category=> {
+                                                    %>
+                                                    <a href="/filter?category=<%= category %>">
+                                                        <%= category %>
+                                                    </a>,
+                                                    <% }) %>
                                             </p>
                                             <span class="ps-shoe__price">
                                                 <% if (product.salePrice < product.regularPrice) { %>
                                                     <del>₹<%= product.regularPrice.toLocaleString('en-IN') %></del>
-                                                <% } %>
-                                                ₹<%= product.salePrice.toLocaleString('en-IN') %>
+                                                    <% } %>
+                                                        ₹<%= product.salePrice.toLocaleString('en-IN') %>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        <% }) %>
+                            <% }) %>
                     </div>
                 </div>
             </div>
@@ -745,7 +741,8 @@
                                 <p>ON ORDER OVER 1000</p>
                             </div>
                             <div class="ps-iconbox__content">
-                                <p>Want to track a package? Find tracking information and order details from Your Orders.</p>
+                                <p>Want to track a package? Find tracking information and order details from Your
+                                    Orders.</p>
                             </div>
                         </div>
                     </div>
@@ -756,7 +753,8 @@
                                 <p>WITHIN 30 DAYS AFTER DELIVERY.</p>
                             </div>
                             <div class="ps-iconbox__content">
-                                <p>You may return most new, unopened items sold within 30 days of delivery for a full refund.</p>
+                                <p>You may return most new, unopened items sold within 30 days of delivery for a
+                                    full refund.</p>
                             </div>
                         </div>
                     </div>
@@ -767,7 +765,8 @@
                                 <p>WE CAN HELP YOU ONLINE.</p>
                             </div>
                             <div class="ps-iconbox__content">
-                                <p>We offer a 24/7 customer hotline so you’re never alone if you have a question.</p>
+                                <p>We offer a 24/7 customer hotline so you’re never alone if you have a question.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -782,7 +781,8 @@
                     data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000"
                     data-owl-mousedrag="on" data-owl-animate-in="fadeIn" data-owl-animate-out="fadeOut">
                     <div class="ps-testimonial">
-                        <div class="ps-testimonial__thumbnail"><img src="images/testimonial/ajsa.png" alt=""><i class="fa fa-quote-left"></i></div>
+                        <div class="ps-testimonial__thumbnail"><img src="images/testimonial/ajsa.png" alt=""><i
+                                class="fa fa-quote-left"></i></div>
                         <header>
                             <select class="ps-rating">
                                 <option value="1">1</option>
@@ -794,11 +794,14 @@
                             <p>Ajsal - CEO & Founder Invision</p>
                         </header>
                         <footer>
-                            <p>“Dessert pudding dessert jelly beans cupcake sweet caramels gingerbread. Fruitcake biscuit cheesecake. Cookie topping sweet muffin pudding tart bear claw sugar plum croissant.”</p>
+                            <p>“Dessert pudding dessert jelly beans cupcake sweet caramels gingerbread. Fruitcake
+                                biscuit cheesecake. Cookie topping sweet muffin pudding tart bear claw sugar plum
+                                croissant.”</p>
                         </footer>
                     </div>
                     <div class="ps-testimonial">
-                        <div class="ps-testimonial__thumbnail"><img src="images/testimonial/shamveel.png" alt=""><i class="fa fa-quote-left"></i></div>
+                        <div class="ps-testimonial__thumbnail"><img src="images/testimonial/shamveel.png" alt=""><i
+                                class="fa fa-quote-left"></i></div>
                         <header>
                             <select class="ps-rating">
                                 <option value="1">1</option>
@@ -810,11 +813,14 @@
                             <p>Shamveel - Chief Operating Officer (COO)</p>
                         </header>
                         <footer>
-                            <p>“Dessert pudding dessert jelly beans cupcake sweet caramels gingerbread. Fruitcake biscuit cheesecake. Cookie topping sweet muffin pudding tart bear claw sugar plum croissant.”</p>
+                            <p>“Dessert pudding dessert jelly beans cupcake sweet caramels gingerbread. Fruitcake
+                                biscuit cheesecake. Cookie topping sweet muffin pudding tart bear claw sugar plum
+                                croissant.”</p>
                         </footer>
                     </div>
                     <div class="ps-testimonial">
-                        <div class="ps-testimonial__thumbnail"><img src="images/testimonial/nijas.png" alt=""><i class="fa fa-quote-left"></i></div>
+                        <div class="ps-testimonial__thumbnail"><img src="images/testimonial/nijas.png" alt=""><i
+                                class="fa fa-quote-left"></i></div>
                         <header>
                             <select class="ps-rating">
                                 <option value="1">1</option>
@@ -826,11 +832,14 @@
                             <p>Nijas - Chief Financial Officer (CFO)</p>
                         </header>
                         <footer>
-                            <p>“Dessert pudding dessert jelly beans cupcake sweet caramels gingerbread. Fruitcake biscuit cheesecake. Cookie topping sweet muffin pudding tart bear claw sugar plum croissant.”</p>
+                            <p>“Dessert pudding dessert jelly beans cupcake sweet caramels gingerbread. Fruitcake
+                                biscuit cheesecake. Cookie topping sweet muffin pudding tart bear claw sugar plum
+                                croissant.”</p>
                         </footer>
                     </div>
                     <div class="ps-testimonial">
-                        <div class="ps-testimonial__thumbnail"><img src="images/testimonial/fahad.png" alt=""><i class="fa fa-quote-left"></i></div>
+                        <div class="ps-testimonial__thumbnail"><img src="images/testimonial/fahad.png" alt=""><i
+                                class="fa fa-quote-left"></i></div>
                         <header>
                             <select class="ps-rating">
                                 <option value="1">1</option>
@@ -842,7 +851,9 @@
                             <p>Fahad - Chief Marketing Officer (CMO)</p>
                         </header>
                         <footer>
-                            <p>“Dessert pudding dessert jelly beans cupcake sweet caramels gingerbread. Fruitcake biscuit cheesecake. Cookie topping sweet muffin pudding tart bear claw sugar plum croissant.”</p>
+                            <p>“Dessert pudding dessert jelly beans cupcake sweet caramels gingerbread. Fruitcake
+                                biscuit cheesecake. Cookie topping sweet muffin pudding tart bear claw sugar plum
+                                croissant.”</p>
                         </footer>
                     </div>
                 </div>
@@ -1011,7 +1022,7 @@
 
                 // Hot Deal Today Rotation
                 const hotDealContainer = document.getElementById('hot-deal-container');
-                let hotDealProducts = <%- JSON.stringify(products) %>;
+                let hotDealProducts = <% - JSON.stringify(products) %>;
                 let currentHotDealIndex = Math.floor(Math.random() * hotDealProducts.length);
 
                 const updateHotDeal = () => {
@@ -1092,5 +1103,6 @@
         </script>
     </main>
     <%- include("../partials/user/footer") %>
-</body>
-</html>
+        </body>
+
+        </html>

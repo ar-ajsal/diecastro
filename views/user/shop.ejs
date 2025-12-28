@@ -1,57 +1,5 @@
 <%- include("../partials/user/header") %>
-<!DOCTYPE html>
-<!--[if IE 7]><html class="ie ie7"><![endif]-->
-<!--[if IE 8]><html class="ie ie8"><![endif]-->
-<!--[if IE 9]><html class="ie ie9"><![endif]-->
-<html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link href="apple-touch-icon.png" rel="apple-touch-icon">
-    <link href="favicon.png" rel="icon">
-    <meta name="author" content="Nghia Minh Luong">
-    <meta name="keywords" content="Default Description">
-    <title>Diecastro | Premium Diecast Cars Collection</title>
-    <meta name="description" content="Shop high-quality miniature cars at Diecastro – your diecast dreams in 1:64 scale!">
-
-    <!-- Fonts-->
-    <link
-        href="https://fonts.googleapis.com/css?family=Archivo+Narrow:300,400,700%7CMontserrat:300,400,500,600,700,800,900"
-        rel="stylesheet">
-    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="plugins/ps-icon/style.css">
-    <!-- CSS Library-->
-    <link rel="stylesheet" href="plugins/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="plugins/owl-carousel/assets/owl.carousel.css">
-    <link rel="stylesheet" href="plugins/jquery-bar-rating/dist/themes/fontawesome-stars.css">
-    <link rel="stylesheet" href="plugins/slick/slick/slick.css">
-    <link rel="stylesheet" href="plugins/bootstrap-select/dist/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="plugins/Magnific-Popup/dist/magnific-popup.css">
-    <link rel="stylesheet" href="plugins/jquery-ui/jquery-ui.min.css">
-    <link rel="stylesheet" href="plugins/revolution/css/settings.css">
-    <link rel="stylesheet" href="plugins/revolution/css/layers.css">
-    <link rel="stylesheet" href="plugins/revolution/css/navigation.css">
-    <!-- Custom-->
-    <link rel="stylesheet" href="css/style.css">
-    <!-- Toastr CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <!-- Wishlist Dependencies -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Toastr JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <!--HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries-->
-    <!--WARNING: Respond.js doesn't work if you view the page via file://-->
-    <!--[if lt IE 9]><script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script><script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script><![endif]-->
-</head>
-<!--[if IE 7]><body class="ie7 lt-ie8 lt-ie9 lt-ie10"><![endif]-->
-<!--[if IE 8]><body class="ie8 lt-ie9 lt-ie10"><![endif]-->
-<!--[if IE 9]><body class="ie9 lt-ie10"></body><![endif]-->
-
-<body class="ps-loading">
     <main class="ps-main">
         <style>
             /* General Reset */
@@ -129,7 +77,8 @@
                     justify-content: flex-start;
                 }
 
-                .col-first a, .col-first span.current {
+                .col-first a,
+                .col-first span.current {
                     font-size: 14px;
                     padding: 6px 10px;
                 }
@@ -325,28 +274,37 @@
             <div class="ps-products" data-mh="product-listing">
                 <div class="ps-product-action">
                     <div class="ps-pagination">
-                        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                        <link rel="stylesheet"
+                            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
                         <div class="container mt-4">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="advanced-search-sort">
                                         <form action="/shop" method="GET" class="form-inline">
                                             <div class="form-group mr-2 mb-2">
-                                                <input type="text" id="advanced-search-glow" name="search" class="form-control" placeholder="Search products..." value="<%= search || '' %>">
+                                                <input type="text" id="advanced-search-glow" name="search"
+                                                    class="form-control" placeholder="Search products..."
+                                                    value="<%= search || '' %>">
                                             </div>
                                             <div class="form-group mr-2 mb-2">
                                                 <select name="sort" class="form-control">
-                                                    <option value="" <%= sort === '' ? 'selected' : '' %>>Sort...</option>
-                                                    <option value="price_asc" <%= sort === 'price_asc' ? 'selected' : '' %>>Price: Low to High</option>
-                                                    <option value="price_desc" <%= sort === 'price_desc' ? 'selected' : '' %>>Price: High to Low</option>
-                                                    <option value="name_asc" <%= sort === 'name_asc' ? 'selected' : '' %>>Name: A to Z</option>
-                                                    <option value="name_desc" <%= sort === 'name_desc' ? 'selected' : '' %>>Name: Z to A</option>
+                                                    <option value="" <%=sort==='' ? 'selected' : '' %>>Sort...</option>
+                                                    <option value="price_asc" <%=sort==='price_asc' ? 'selected' : '' %>
+                                                        >Price: Low to High</option>
+                                                    <option value="price_desc" <%=sort==='price_desc' ? 'selected' : ''
+                                                        %>>Price: High to Low</option>
+                                                    <option value="name_asc" <%=sort==='name_asc' ? 'selected' : '' %>
+                                                        >Name: A to Z</option>
+                                                    <option value="name_desc" <%=sort==='name_desc' ? 'selected' : '' %>
+                                                        >Name: Z to A</option>
                                                 </select>
                                             </div>
                                             <input type="hidden" name="category" value="<%= selectedCategory || '' %>">
-                                            <button type="submit" class="btn btn-primary mb-2" style="background-color: #27ae60;">Apply</button>
+                                            <button type="submit" class="btn btn-primary mb-2"
+                                                style="background-color: #27ae60;">Apply</button>
                                             <a href="/shop" class="mb-2">
-                                                <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                                <button type="button" class="btn btn-danger"><i
+                                                        class="fa fa-trash"></i></button>
                                             </a>
                                         </form>
                                     </div>
@@ -354,51 +312,69 @@
                             </div>
                         </div>
                         <ul class="pagination">
-                            <% if (currentPage > 1) { %>
-                                <li><a href="/shop?page=<%= currentPage - 1 %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><i class="fa fa-angle-left"></i></a></li>
-                            <% } %>
-                            <% if (totalPages > 5 && currentPage > 3) { %>
-                                <li><a href="/shop?page=1&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>">1</a></li>
-                                <% if (currentPage > 4) { %>
-                                    <li><a href="#">...</a></li>
+                            <% if (currentPage> 1) { %>
+                                <li><a
+                                        href="/shop?page=<%= currentPage - 1 %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><i
+                                            class="fa fa-angle-left"></i></a></li>
                                 <% } %>
-                            <% } %>
-                            <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
-                                <li class="<%= currentPage === i ? 'active' : '' %>"><a href="/shop?page=<%= i %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><%= i %></a></li>
-                            <% } %>
-                            <% if (totalPages > 5 && currentPage < totalPages - 2) { %>
-                                <% if (currentPage < totalPages - 3) { %>
-                                    <li><a href="#">...</a></li>
-                                <% } %>
-                                <li><a href="/shop?page=<%= totalPages %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><%= totalPages %></a></li>
-                            <% } %>
-                            <% if (currentPage < totalPages) { %>
-                                <li><a href="/shop?page=<%= currentPage + 1 %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><i class="fa fa-angle-right"></i></a></li>
-                            <% } %>
+                                    <% if (totalPages> 5 && currentPage > 3) { %>
+                                        <li><a
+                                                href="/shop?page=1&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>">1</a>
+                                        </li>
+                                        <% if (currentPage> 4) { %>
+                                            <li><a href="#">...</a></li>
+                                            <% } %>
+                                                <% } %>
+                                                    <% for (let i=Math.max(1, currentPage - 2); i <=Math.min(totalPages,
+                                                        currentPage + 2); i++) { %>
+                                                        <li class="<%= currentPage === i ? 'active' : '' %>"><a
+                                                                href="/shop?page=<%= i %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>">
+                                                                <%= i %>
+                                                            </a></li>
+                                                        <% } %>
+                                                            <% if (totalPages> 5 && currentPage < totalPages - 2) { %>
+                                                                    <% if (currentPage < totalPages - 3) { %>
+                                                                        <li><a href="#">...</a></li>
+                                                                        <% } %>
+                                                                            <li><a
+                                                                                    href="/shop?page=<%= totalPages %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>">
+                                                                                    <%= totalPages %>
+                                                                                </a></li>
+                                                                            <% } %>
+                                                                                <% if (currentPage < totalPages) { %>
+                                                                                    <li><a
+                                                                                            href="/shop?page=<%= currentPage + 1 %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><i
+                                                                                                class="fa fa-angle-right"></i></a>
+                                                                                    </li>
+                                                                                    <% } %>
                         </ul>
                     </div>
                 </div>
                 <div class="ps-product__columns">
-                    <% for (let i = 0; i < products.length; i++) { %>
+                    <% for (let i=0; i < products.length; i++) { %>
                         <div class="ps-product__column">
                             <div class="ps-shoe mb-30">
                                 <div class="ps-shoe__thumbnail">
                                     <% if (products[i].isNew) { %>
                                         <div class="ps-badge"><span>New</span></div>
-                                    <% } %>
-                                    <% if (products[i].salePrice < products[i].regularPrice) { %>
-                                        <!-- <div class="ps-badge ps-badge--sale ps-badge--2nd"><span>-<%= Math.round(((products[i].regularPrice - products[i].salePrice) / products[i].regularPrice) * 100) %>%</span></div> -->
-                                    <% } %>
-                                    <a class="ps-shoe__favorite" href="#" onclick="addToWishlist('<%= products[i]._id %>')"><i class="ps-icon-heart"></i></a>
-                                    <img src="<%= products[i].productImage[0] %>" alt="<%= products[i].productName %>">
-                                    <a class="ps-shoe__overlay" href="/productDetails?id=<%= products[i]._id %>"></a>
+                                        <% } %>
+                                            <% if (products[i].salePrice < products[i].regularPrice) { %>
+                                                <!-- <div class="ps-badge ps-badge--sale ps-badge--2nd"><span>-<%= Math.round(((products[i].regularPrice - products[i].salePrice) / products[i].regularPrice) * 100) %>%</span></div> -->
+                                                <% } %>
+                                                    <a class="ps-shoe__favorite" href="#"
+                                                        onclick="addToWishlist('<%= products[i]._id %>')"><i
+                                                            class="ps-icon-heart"></i></a>
+                                                    <img src="<%= products[i].productImage[0] %>"
+                                                        alt="<%= products[i].productName %>">
+                                                    <a class="ps-shoe__overlay"
+                                                        href="/productDetails?id=<%= products[i]._id %>"></a>
                                 </div>
                                 <div class="ps-shoe__content">
                                     <div class="ps-shoe__variants">
                                         <div class="ps-shoe__variant normal">
-                                            <% for (let j = 0; j < Math.min(products[i].productImage.length, 4); j++) { %>
+                                            <% for (let j=0; j < Math.min(products[i].productImage.length, 4); j++) { %>
                                                 <img src="<%= products[i].productImage[j] %>" alt="">
-                                            <% } %>
+                                                <% } %>
                                         </div>
                                         <select class="ps-rating ps-shoe__rating">
                                             <option value="1">1</option>
@@ -409,46 +385,62 @@
                                         </select>
                                     </div>
                                     <div class="ps-shoe__detail" style="background:transparent">
-                                        <a class="ps-shoe__name" href="/productDetails?id=<%= products[i]._id %>"><%= products[i].productName %></a>
+                                        <a class="ps-shoe__name" href="/productDetails?id=<%= products[i]._id %>">
+                                            <%= products[i].productName %>
+                                        </a>
                                         <p class="ps-shoe__categories">
                                             <!-- <a href="#">Men shoes</a>,<a href="#">Nike</a>,<a href="#">Jordan</a> -->
                                         </p>
                                         <span class="ps-shoe__price">
                                             <% if (products[i].salePrice < products[i].regularPrice) { %>
                                                 <del>₹<%= products[i].regularPrice.toLocaleString('en-IN') %></del>
-                                            <% } %>
-                                            ₹<%= products[i].salePrice.toLocaleString('en-IN') %>
+                                                <% } %>
+                                                    ₹<%= products[i].salePrice.toLocaleString('en-IN') %>
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    <% } %>
+                        <% } %>
                 </div>
                 <div class="ps-product-action">
                     <div class="ps-pagination">
                         <ul class="pagination">
-                            <% if (currentPage > 1) { %>
-                                <li><a href="/shop?page=<%= currentPage - 1 %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><i class="fa fa-angle-left"></i></a></li>
-                            <% } %>
-                            <% if (totalPages > 5 && currentPage > 3) { %>
-                                <li><a href="/shop?page=1&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>">1</a></li>
-                                <% if (currentPage > 4) { %>
-                                    <li><a href="#">...</a></li>
+                            <% if (currentPage> 1) { %>
+                                <li><a
+                                        href="/shop?page=<%= currentPage - 1 %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><i
+                                            class="fa fa-angle-left"></i></a></li>
                                 <% } %>
-                            <% } %>
-                            <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
-                                <li class="<%= currentPage === i ? 'active' : '' %>"><a href="/shop?page=<%= i %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><%= i %></a></li>
-                            <% } %>
-                            <% if (totalPages > 5 && currentPage < totalPages - 2) { %>
-                                <% if (currentPage < totalPages - 3) { %>
-                                    <li><a href="#">...</a></li>
-                                <% } %>
-                                <li><a href="/shop?page=<%= totalPages %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><%= totalPages %></a></li>
-                            <% } %>
-                            <% if (currentPage < totalPages) { %>
-                                <li><a href="/shop?page=<%= currentPage + 1 %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><i class="fa fa-angle-right"></i></a></li>
-                            <% } %>
+                                    <% if (totalPages> 5 && currentPage > 3) { %>
+                                        <li><a
+                                                href="/shop?page=1&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>">1</a>
+                                        </li>
+                                        <% if (currentPage> 4) { %>
+                                            <li><a href="#">...</a></li>
+                                            <% } %>
+                                                <% } %>
+                                                    <% for (let i=Math.max(1, currentPage - 2); i <=Math.min(totalPages,
+                                                        currentPage + 2); i++) { %>
+                                                        <li class="<%= currentPage === i ? 'active' : '' %>"><a
+                                                                href="/shop?page=<%= i %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>">
+                                                                <%= i %>
+                                                            </a></li>
+                                                        <% } %>
+                                                            <% if (totalPages> 5 && currentPage < totalPages - 2) { %>
+                                                                    <% if (currentPage < totalPages - 3) { %>
+                                                                        <li><a href="#">...</a></li>
+                                                                        <% } %>
+                                                                            <li><a
+                                                                                    href="/shop?page=<%= totalPages %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>">
+                                                                                    <%= totalPages %>
+                                                                                </a></li>
+                                                                            <% } %>
+                                                                                <% if (currentPage < totalPages) { %>
+                                                                                    <li><a
+                                                                                            href="/shop?page=<%= currentPage + 1 %>&category=<%= selectedCategory || '' %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><i
+                                                                                                class="fa fa-angle-right"></i></a>
+                                                                                    </li>
+                                                                                    <% } %>
                         </ul>
                     </div>
                 </div>
@@ -460,9 +452,12 @@
                     </div>
                     <div class="ps-widget__content">
                         <ul class="ps-list--checked">
-                            <% for (let i = 0; i < category.length; i++) { %>
-                                <li><a href="/shop?category=<%= category[i]._id %>&search=<%= search || '' %>&sort=<%= sort || '' %>"><%= category[i].name %> (<%= category[i].productCount %>)</a></li>
-                            <% } %>
+                            <% for (let i=0; i < category.length; i++) { %>
+                                <li><a
+                                        href="/shop?category=<%= category[i]._id %>&search=<%= search || '' %>&sort=<%= sort || '' %>">
+                                        <%= category[i].name %> (<%= category[i].productCount %>)
+                                    </a></li>
+                                <% } %>
                         </ul>
                     </div>
                 </aside>
@@ -528,6 +523,6 @@
 
         <%- include("../partials/user/footer") %>
     </main>
-</body>
+    </body>
 
-</html>
+    </html>
