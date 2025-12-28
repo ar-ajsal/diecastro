@@ -94,8 +94,8 @@ const Review = require("../../models/reviewSchema");
 //             count: 10,
 //             isLoggedIn,
 //             session: req.session, 
-        
-            
+
+
 //         });
 //     } catch (error) {
 //         console.error("Error for fetching product details:", error.message, error.stack);
@@ -149,9 +149,9 @@ const productDetails = async (req, res) => {
             category: { $in: categoryIds },
             quantity: { $gt: 0 },
         })
-        .sort({ createdOn: -1 })
-        .skip(0)
-        .limit(9);
+            .sort({ createdOn: -1 })
+            .skip(0)
+            .limit(9);
 
         // ✅ Render the product page
         res.render("product-details", {
@@ -258,14 +258,22 @@ const addToCompare = (req, res) => {
     if (!req.session.compare) req.session.compare = [];
 
     // Avoid duplicates and max 2 products
-    if (!req.session.compare.includes(productId)) {
-        if (req.session.compare.length < 2) {
-            req.session.compare.push(productId);
-        }
+    let message = "";
+    let status = false;
+
+    if (req.session.compare.includes(productId)) {
+        message = "Product already in compare list";
+        status = false;
+    } else if (req.session.compare.length >= 2) {
+        message = "You can only compare up to 2 products";
+        status = false;
+    } else {
+        req.session.compare.push(productId);
+        message = "Product added to compare list";
+        status = true;
     }
 
-    res.redirect(req.get("Referer") || "/");
-
+    res.json({ success: status, message: message, count: req.session.compare.length });
 };
 
 // Remove product from compare
@@ -292,7 +300,7 @@ const removeFromCompare = (req, res) => {
 //         res.render("compare", {
 //             products,
 //             session: req.session, 
-            
+
 //         });
 //     } catch (err) {
 //         console.error("Error rendering compare page:", err);
@@ -302,29 +310,29 @@ const removeFromCompare = (req, res) => {
 
 const showCompare = async (req, res) => {
     try {
-      const productIds = req.session.compare || [];
-      
-      if (productIds.length === 0) {
-        console.log("No products in compare session");
-      }
-  
-      const products = await Product.find({ _id: { $in: productIds } })
-        .populate('category')
-        .populate({
-          path: 'reviews',
-          populate: { path: 'user', select: 'name' }
+        const productIds = req.session.compare || [];
+
+        if (productIds.length === 0) {
+            console.log("No products in compare session");
+        }
+
+        const products = await Product.find({ _id: { $in: productIds } })
+            .populate('category')
+            .populate({
+                path: 'reviews',
+                populate: { path: 'user', select: 'name' }
+            });
+
+        res.render("compare", {
+            products,
+            count: 10, // Confirm if this is used in the template
+            session: req.session
         });
-  
-      res.render("compare", {
-        products,
-        count: 10, // Confirm if this is used in the template
-        session: req.session
-      });
     } catch (err) {
-      console.error("Error rendering compare page:", err);
-      res.status(500).send("Server error");
+        console.error("Error rendering compare page:", err);
+        res.status(500).send("Server error");
     }
-  };
+};
 
 
 module.exports = {
@@ -334,6 +342,6 @@ module.exports = {
     addToCompare,
     removeFromCompare,
     showCompare
-    
+
 };
 

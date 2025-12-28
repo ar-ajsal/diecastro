@@ -61,7 +61,7 @@
 // }
 
 // const editAddress = async (req, res) => {
-    
+
 //     const { addressId, name, landMark, city, state, pincode, phone, addressType, altPhone } = req.body;
 
 //     try {
@@ -98,7 +98,7 @@
 //     postAddress,
 //     deleteAddress,
 //     editAddress,
-   
+
 // };
 
 const User = require("../../models/userSchema");
@@ -135,10 +135,10 @@ const postAddress = async (req, res) => {
             userAddress.address.push({ name, phone, altPhone, pincode, landMark, city, state, addressType });
             await userAddress.save();
         }
-        res.redirect('/address');
+        res.json({ success: true, message: "Address added successfully" });
     } catch (error) {
         console.error("Error in postAddress:", error);
-        res.redirect("/pageNotFound");
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };
 
@@ -150,7 +150,7 @@ const deleteAddress = async (req, res) => {
             return res.status(404).json({ success: false, message: "Address not found" });
         }
         await Address.updateOne({ "address._id": addressId }, { $pull: { address: { _id: addressId } } });
-        return res.redirect('/address');
+        return res.json({ success: true, message: "Address deleted successfully" });
     } catch (error) {
         console.error("Error in deleteAddress:", error);
         res.status(500).json({ success: false, message: "Failed to delete Address" });
@@ -182,7 +182,7 @@ const editAddress = async (req, res) => {
             }
         );
 
-        return res.redirect('/address');
+        return res.json({ success: true, message: "Address updated successfully" });
     } catch (error) {
         console.error("Error updating address:", error);
         return res.status(500).json({ message: "Internal Server Error" });
