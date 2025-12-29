@@ -192,6 +192,8 @@ const editAddress = async (req, res) => {
 const getAddressFromCoordinates = async (req, res) => {
     try {
         const { latitude, longitude } = req.body;
+        // User provided API Key
+        const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyCUdGbOlp9Jp5ELRMFSoPZz20wq05ZaVOo';
 
         if (!latitude || !longitude) {
             return res.status(400).json({ success: false, message: "Coordinates are required" });
@@ -199,32 +201,55 @@ const getAddressFromCoordinates = async (req, res) => {
 
         console.log(`Received coordinates: Latitude=${latitude}, Longitude=${longitude}`);
 
-        // Use OpenStreetMap Nominatim API for reverse geocoding
         const response = await axios.get(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`,
-            {
-                headers: {
-                    'User-Agent': 'YourAppName/1.0 (your.email@example.com)' // Nominatim requires a User-Agent
-                }
-            }
+            `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`
         );
 
-        const addressData = response.data;
-        if (!addressData || !addressData.address) {
-            console.error("No address found for coordinates:", { latitude, longitude });
+        const data = response.data;
+
+        if (data.status !== 'OK' || !data.results || data.results.length === 0) {
+            console.error("Google Maps API Error or No Results:", data.status);
             return res.status(404).json({ success: false, message: "Address not found for the given coordinates" });
         }
 
-        // Extract relevant address components
+        const result = data.results[0];
+        const components = result.address_components;
+
+        let city = '';
+        let state = '';
+        let pincode = '';
+        let landMark = '';
+
+        // Helper to find component by type
+        const getComponent = (type) => components.find(c => c.types.includes(type))?.long_name || '';
+
+        city = getComponent('locality') || getComponent('administrative_area_level_2');
+        state = getComponent('administrative_area_level_1');
+        pincode = getComponent('postal_code');
+
+        // Construct a landmark from specific components
+        const sublocality = getComponent('sublocality');
+        const neighborhood = getComponent('neighborhood');
+        const street = getComponent('route');
+        const premise = getComponent('premise');
+
+        // Prioritize meaningful landmark parts
+        let landmarkParts = [];
+        if (premise) landmarkParts.push(premise);
+        if (street) landmarkParts.push(street);
+        if (sublocality) landmarkParts.push(sublocality);
+        if (neighborhood) landmarkParts.push(neighborhood);
+
+        landMark = landmarkParts.join(', ');
+
         const address = {
-            city: addressData.address.city || addressData.address.town || addressData.address.village || '',
-            state: addressData.address.state || '',
-            pincode: addressData.address.postcode || '',
-            landMark: addressData.address.neighbourhood || addressData.address.suburb || addressData.address.road || '',
-            street: addressData.address.road || ''
+            city: city,
+            state: state,
+            pincode: pincode,
+            landMark: landMark
         };
 
-        console.log("Fetched address:", address);
+        console.log("Fetched address (Google):", address);
 
         return res.json({ success: true, address, coordinates: { latitude, longitude } });
     } catch (error) {

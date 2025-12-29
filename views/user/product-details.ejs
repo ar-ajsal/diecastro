@@ -1154,6 +1154,14 @@
           success: (response) => {
             if (response.success) {
               toastr.success(response.message, 'Success');
+
+              // Update Compare Badge
+              let badge = $('.nav-icon[aria-label="View Compare"] .nav-icon__badge');
+              if (badge.length) {
+                badge.text(response.count);
+              } else {
+                $('.nav-icon[aria-label="View Compare"]').append(`<span class="nav-icon__badge">${response.count}</span>`);
+              }
             } else {
               toastr.info(response.message, 'Info');
             }

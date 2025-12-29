@@ -1,11 +1,11 @@
 
 
+const env = require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
 const session = require('express-session');
 const passport = require('./config/passport');
-const env = require('dotenv').config();
 const connectDB = require('./config/db');
 const userRouter = require('./routes/userRoutes');
 const adminRouter = require('./routes/adminRoutes');

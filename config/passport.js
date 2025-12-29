@@ -4,6 +4,12 @@ const User = require('../models/userSchema');
 const env = require('dotenv').config();
 
 
+console.log("Passport Config Loaded");
+console.log("GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? "Found" : "Not Found");
+if (process.env.GOOGLE_CLIENT_ID) {
+    console.log("Client ID Length:", process.env.GOOGLE_CLIENT_ID.length);
+}
+
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
